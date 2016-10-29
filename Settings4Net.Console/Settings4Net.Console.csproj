@@ -4,15 +4,17 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{3A18359F-D56C-4218-B187-57919FC30850}</ProjectGuid>
-    <OutputType>Library</OutputType>
+    <ProjectGuid>{00B41B97-19F7-4ACD-A8A8-8AEA8658D748}</ProjectGuid>
+    <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>settings4net.Core</RootNamespace>
-    <AssemblyName>settings4net.Core</AssemblyName>
+    <RootNamespace>Settings4Net.Console</RootNamespace>
+    <AssemblyName>Settings4Net.Console</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -20,25 +22,20 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <RegisterForComInterop>false</RegisterForComInterop>
-    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
-    <DocumentationFile>bin\Debug\settings4net.Core.XML</DocumentationFile>
+    <DocumentationFile>bin\Debug\Settings4Net.Console.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Release\Settings4Net.Console.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System" />
-    <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -48,29 +45,22 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CodeSettingsRepository.cs" />
-    <Compile Include="Interfaces\ISettingsRepository.cs" />
-    <Compile Include="JSONFileRepository.cs" />
-    <Compile Include="XMLDocumentationLoader.cs" />
-    <Compile Include="Interfaces\IDocumentationLoader.cs" />
-    <Compile Include="Model\SettingToCodeData.cs" />
-    <Compile Include="Interfaces\ISettingsClass.cs" />
-    <Compile Include="SettingsManager.cs" />
-    <Compile Include="RemoteRepository.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="XPTOSettings.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\settings4net.Core.Interfaces\settings4net.Core.Interfaces.csproj">
-      <Project>{e4c02129-66ca-4f88-b2a8-d96746c433fd}</Project>
-      <Name>settings4net.Core.Interfaces</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\settings4net.model\settings4net.Model.csproj">
-      <Project>{dd7b420c-0e3f-4d3d-9b63-a43427265808}</Project>
-      <Name>settings4net.Model</Name>
-    </ProjectReference>
+    <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
+    <ProjectReference Include="..\settings4net.API.Core\settings4net.API.Core.csproj">
+      <Project>{2fdef299-3ffa-450d-a0b6-d267a8bd18fc}</Project>
+      <Name>settings4net.API.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\settings4net.Core\settings4net.Core.csproj">
+      <Project>{3A18359F-D56C-4218-B187-57919FC30850}</Project>
+      <Name>settings4net.Core</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

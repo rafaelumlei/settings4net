@@ -12,7 +12,7 @@ namespace settings4net.Core.Tests
         public void TestMethod1()
         {
             RemoteRepository rep = new RemoteRepository();
-            var setting = rep.GetSetting("NOS.SETTINGS.NOW");
+            // var setting = rep.GetSetting("SETTINGS.NOW");
         }
     }
 }

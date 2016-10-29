@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "settings4net.API.Core", "se
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "settings4net.Core.Tests", "settings4net.Core.Tests\settings4net.Core.Tests.csproj", "{FFBC3C45-E846-41B0-BC76-B088CFCB27CD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Settings4Net.Console", "Settings4Net.Console\Settings4Net.Console.csproj", "{00B41B97-19F7-4ACD-A8A8-8AEA8658D748}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +53,10 @@ Global
 		{FFBC3C45-E846-41B0-BC76-B088CFCB27CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FFBC3C45-E846-41B0-BC76-B088CFCB27CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FFBC3C45-E846-41B0-BC76-B088CFCB27CD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{00B41B97-19F7-4ACD-A8A8-8AEA8658D748}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{00B41B97-19F7-4ACD-A8A8-8AEA8658D748}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{00B41B97-19F7-4ACD-A8A8-8AEA8658D748}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{00B41B97-19F7-4ACD-A8A8-8AEA8658D748}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

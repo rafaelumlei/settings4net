@@ -10,44 +10,35 @@ namespace settings4net.Model
     public class Setting
     {
 
-        /// <summary>
-        /// Namespace + "." + Name
-        /// </summary>
-        public string Key
+        public Setting()
         {
-            get
-            {
-                return this.Namespace + "." + this.Name;
-            }
+        }
+
+        public Setting(string applicationname, string environment, string fullpath, string jsonValue, string doc) : this()
+        {
+            this.Application = applicationname;
+            this.Environment = environment;
+            this.Fullpath = fullpath;
+            this.JSONValue = jsonValue;
+            this.Documentation = doc;
+            this.Created = this.Updated = DateTimeOffset.UtcNow;
         }
 
         /// <summary>
         /// Env + ":" + Key
         /// </summary>
-        public string FullKey
+        public string Key
         {
             get
             {
-                return this.Environment + ":" + this.Key;
+                return this.Application + ":" + this.Environment + ":" + this.Fullpath;
             }
         }
 
         /// <summary>
-        /// Gets or sets Namespace/Assembly name of the setting
+        /// Gets or sets the name of the application/host that owns this setting
         /// </summary>
-        public string Namespace { get; set; }
-
-        /// <summary>
-        /// Gets ir sets the setting name
-        /// </summary>
-        public string Name { get; set; }
-
-
-        /// <summary>
-        /// Gets or sets the setting documentation: possible values 
-        /// and impacts in the system
-        /// </summary>
-        public string Documentation { get; set; }
+        public string Application { get; set; }
 
         /// <summary>
         /// Gets or sets the environment to which the setting value applies
@@ -55,9 +46,50 @@ namespace settings4net.Model
         public string Environment { get; set; }
 
         /// <summary>
+        /// Gets or sets full path to the setting (tipically Namespace + Class + Field)
+        /// </summary>
+        public string Fullpath { get; set; }
+
+        /// <summary>
+        /// Gets or sets the setting documentation: possible values 
+        /// and impacts in the system
+        /// </summary>
+        public string Documentation { get; set; }
+
+        public DateTimeOffset Created { get; set; }
+
+        public DateTimeOffset Updated { get; set; }
+
+        /// <summary>
         /// Setting JSON value
         /// </summary>
         public String JSONValue { get; set; }
 
+        public static bool operator ==(Setting x, Setting y)
+        {
+            return x.Application == y.Application
+                && x.Fullpath == y.Fullpath
+                && x.Documentation == y.Documentation
+                && x.JSONValue == y.JSONValue;
+        }
+
+        public static bool operator !=(Setting x, Setting y)
+        {
+            return !(x == y);
+        }
+
+        public override bool Equals(Object obj)
+        {
+            return obj is Setting && this == (Setting)obj;
+        }
+
+        public void Update(Setting newValue)
+        {
+            this.Environment = newValue.Environment;
+            this.Fullpath = newValue.Fullpath;
+            this.Documentation = newValue.Documentation;
+            this.JSONValue = newValue.JSONValue;
+            this.Updated = DateTimeOffset.UtcNow;
+        }
     }
 }

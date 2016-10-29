@@ -1,5 +1,4 @@
 ﻿using Newtonsoft.Json.Linq;
-using settings4net.Core.Interfaces;
 using settings4net.Model;
 using System;
 using System.Collections.Generic;
@@ -15,11 +14,11 @@ namespace settings4net.API.Controllers.WebAPI
     public class SettingsController : ApiController
     {
 
-        public IReadableSettingsRepository SettingsRepository { get; set; }
+        //public IReadableSettingsRepository SettingsRepository { get; set; }
 
         public SettingsController()
         {
-            this.SettingsRepository = null;
+            // this.SettingsRepository = null;
         }
 
         [HttpGet]
@@ -30,7 +29,7 @@ namespace settings4net.API.Controllers.WebAPI
             if (string.IsNullOrEmpty(env))
                 return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Invalid environment.");
 
-            IList<Setting> settings = this.SettingsRepository.GetSettingsByEnv(env) ?? new List<Setting>();
+            IList<Setting> settings = new List<Setting>();
             return Request.CreateResponse(settings);
         }
 
@@ -39,17 +38,17 @@ namespace settings4net.API.Controllers.WebAPI
         [ResponseType(typeof(Setting))]
         public HttpResponseMessage GetSetting(string env, string key)
         {
-            if (string.IsNullOrEmpty(env))
-                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Invalid environment.");
+            //if (string.IsNullOrEmpty(env))
+            //    return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Invalid environment.");
 
-            if (string.IsNullOrEmpty(key))
-                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Invalid setting key.");
+            //if (string.IsNullOrEmpty(key))
+            //    return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Invalid setting key.");
 
-            Setting setting = this.SettingsRepository.GetSetting(key, env);
+            //Setting setting = this.SettingsRepository.GetSetting(key, env);
 
-            if (setting != null)
-                return Request.CreateResponse();
-            else
+            //if (setting != null)
+            //    return Request.CreateResponse();
+            //else
                 return Request.CreateResponse(HttpStatusCode.NotFound, "Setting requested not found");
         }
 
@@ -58,19 +57,19 @@ namespace settings4net.API.Controllers.WebAPI
         [Route("environment/{env}/settings/{key}/value")]
         public HttpResponseMessage GetSettingValue(string env, string key)
         {
-            if (string.IsNullOrEmpty(env))
-                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Invalid environment.");
+            //if (string.IsNullOrEmpty(env))
+            //    return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Invalid environment.");
 
-            if (string.IsNullOrEmpty(key))
-                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Invalid setting key.");
+            //if (string.IsNullOrEmpty(key))
+            //    return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Invalid setting key.");
 
-            Setting setting = this.SettingsRepository.GetSetting(key, env);
+            //Setting setting = this.SettingsRepository.GetSetting(key, env);
 
-            if (setting != null)
-            {
-                return Request.CreateResponse(new JObject(setting.JSONValue));
-            }
-            else
+            //if (setting != null)
+            //{
+            //    return Request.CreateResponse(new JObject(setting.JSONValue));
+            //}
+            //else
                 return Request.CreateResponse(HttpStatusCode.NotFound, "Setting requested not found");
         }
 
