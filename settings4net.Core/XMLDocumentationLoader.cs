@@ -10,9 +10,12 @@ using System.IO;
 
 namespace settings4net.Core
 {
+    /// <summary>
+    /// Class that extracts fields documentation from the assemblies' 
+    /// XML (MSBuild generated) documentation file 
+    /// </summary>
     internal class XMLDocumentationLoader : IDocumentationLoader
     {
-
         private Assembly CurrentAssembly { get; set; }
 
         private XmlDocument AssemblyDocs { get; set; }

@@ -1,7 +1,6 @@
 ﻿using Newtonsoft.Json;
 using settings4net.Core.Model;
 using settings4net.Core.Interfaces;
-using settings4net.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,9 +10,7 @@ namespace settings4net.Core
     public class SettingsManager
     {
 
-        public static Dictionary<string, Setting> CurrentSettings = null;
-
-        public static void InitializeSettings4net(string currentEnvironment, bool local = true, bool remote = true)
+        public static void InitializeSettings4net(string currentEnvironment, bool remote = true)
         {
             InitializeSettings4net(currentEnvironment, new CodeSettingsRepository(), new JSONSettingsRepository());
         }
@@ -30,7 +27,10 @@ namespace settings4net.Core
                     var repoSettings = new Tuple<ISettingsRepository, List<Setting>>(repository, repository.GetSettings(currentEnvironment));
                     activeSettingsReporitory.Add(repoSettings);
                 }
-                catch { }
+                catch (Exception exp)
+                {
+                    Console.WriteLine(exp.ToString());
+                }
             });
 
             // if more than one repository available
@@ -55,12 +55,12 @@ namespace settings4net.Core
                 }
 
                 lowestPriority.Item1.UpdateSettings(currentEnvironment, highestPrioritySettings.Values.ToList());
-                CurrentSettings = lowestPriority.Item1.GetSettings(currentEnvironment).ToDictionary(s => s.Key);
+                List<Setting> currentSettings = lowestPriority.Item1.GetSettings(currentEnvironment);
 
                 // from lowest to highest priority, setting all equal to the lowest priority one
                 for (int i = 1; i <= activeReposCount; i++)
                 {
-                    activeSettingsReporitory.ElementAt(i).Item1.OverrideState(currentEnvironment, CurrentSettings.Values.ToList());
+                    activeSettingsReporitory.ElementAt(i).Item1.OverrideState(currentEnvironment, currentSettings);
                 }
             }
         }

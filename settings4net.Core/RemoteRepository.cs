@@ -1,10 +1,10 @@
 ﻿using settings4net.Core.Interfaces;
+using settings4net.Core.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using settings4net.Model;
 
 namespace settings4net.Core
 {

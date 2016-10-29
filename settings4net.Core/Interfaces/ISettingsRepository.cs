@@ -1,4 +1,4 @@
-﻿using settings4net.Model;
+﻿using settings4net.Core.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;

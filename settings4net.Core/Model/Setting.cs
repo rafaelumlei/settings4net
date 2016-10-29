@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace settings4net.Model
+namespace settings4net.Core.Model
 {
 
     public class Setting

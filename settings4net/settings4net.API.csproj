@@ -309,13 +309,9 @@
     <Content Include="Scripts\jquery-1.10.2.min.map" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\settings4net.Core.Interfaces\settings4net.Core.Interfaces.csproj">
-      <Project>{e4c02129-66ca-4f88-b2a8-d96746c433fd}</Project>
-      <Name>settings4net.Core.Interfaces</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\settings4net.model\settings4net.Model.csproj">
-      <Project>{dd7b420c-0e3f-4d3d-9b63-a43427265808}</Project>
-      <Name>settings4net.Model</Name>
+    <ProjectReference Include="..\settings4net.Core\settings4net.Core.csproj">
+      <Project>{3A18359F-D56C-4218-B187-57919FC30850}</Project>
+      <Name>settings4net.Core</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

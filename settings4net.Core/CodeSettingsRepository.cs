@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using settings4net.Model;
 using settings4net.Core.Model;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace settings4net.Core
 {
@@ -51,7 +51,7 @@ namespace settings4net.Core
                         t.GetFields().Where(f => f.IsPublic).ToList().ForEach(f =>
                         {
                             string fullpath = t.FullName + "." + f.Name;
-                            string jsonValue = JsonConvert.SerializeObject(f.GetValue(null), Formatting.Indented);
+                            JToken jsonValue = JToken.FromObject(f.GetValue(null));
                             string documentation = documentationLoader.GetDocumentation(f);
 
                             SettingToCodeData settingToCode = new SettingToCodeData()
@@ -96,7 +96,7 @@ namespace settings4net.Core
             if (settingToUpdate != null && settingToUpdate.SettingValue != value)
             {
                 settingToUpdate.SettingValue.Update(value);
-                object deserializedSettingValue = JsonConvert.DeserializeObject(value.JSONValue, settingToUpdate.SettingField.FieldType);
+                object deserializedSettingValue = value.JSONValue.ToObject(settingToUpdate.SettingField.FieldType);
                 settingToUpdate.SettingField.SetValue(null, deserializedSettingValue);
             }
         }
