@@ -71,12 +71,12 @@ namespace settings4net.Core
             new EntryConfig()
             {
                 Number = 1,
-                Description = "Oi 1"
+                Description = "Hello 1"
             },
             new EntryConfig()
             {
                 Number = 2,
-                Description = "Oi 2"
+                Description = "Hello 2"
             }
         };
 

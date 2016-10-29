@@ -4,11 +4,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using settings4net.Model;
 using System.IO;
 using Newtonsoft.Json;
 using System.Threading;
 using System.Collections.Concurrent;
+using settings4net.Core.Model;
 
 namespace settings4net.Core
 {
@@ -68,7 +68,7 @@ namespace settings4net.Core
 
         public void OverrideState(string currentEnvironment, List<Setting> values)
         {
-            if (rwlControl.IsWriteLockHeld)
+            if (!rwlControl.IsWriteLockHeld)
                 rwlControl.EnterWriteLock();
 
             try
