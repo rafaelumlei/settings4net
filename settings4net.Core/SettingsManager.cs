@@ -15,16 +15,16 @@ namespace settings4net.Core
             InitializeSettings4net(currentEnvironment, new CodeSettingsRepository(), new JSONSettingsRepository());
         }
 
-        public static void InitializeSettings4net(string currentEnvironment, params ISettingsRepository[] settingRepositoriesChain)
+        public static void InitializeSettings4net(string currentEnvironment, params ISingleAppSettingsRepository[] settingRepositoriesChain)
         {
-            List<Tuple<ISettingsRepository, List<Setting>>> activeSettingsReporitory = new List<Tuple<ISettingsRepository, List<Setting>>>();
+            List<Tuple<ISingleAppSettingsRepository, List<Setting>>> activeSettingsReporitory = new List<Tuple<ISingleAppSettingsRepository, List<Setting>>>();
 
             settingRepositoriesChain.ToList().ForEach(repository =>
             {
                 // some settings repositories may be offline, we have to check they are accessible or not
                 try
                 {
-                    var repoSettings = new Tuple<ISettingsRepository, List<Setting>>(repository, repository.GetSettings(currentEnvironment));
+                    var repoSettings = new Tuple<ISingleAppSettingsRepository, List<Setting>>(repository, repository.GetSettings(currentEnvironment));
                     activeSettingsReporitory.Add(repoSettings);
                 }
                 catch (Exception exp)
@@ -38,7 +38,7 @@ namespace settings4net.Core
             if (activeReposCount >= 1)
             {
                 // lowest relevant: tipically the default setttings that come from the code (dev environment) - has more settings, less priority
-                Tuple<ISettingsRepository, List<Setting>> lowestPriority = activeSettingsReporitory.ElementAt(0);
+                Tuple<ISingleAppSettingsRepository, List<Setting>> lowestPriority = activeSettingsReporitory.ElementAt(0);
 
                 // highest relevant: tipically the setttings that come from DB or remote repositories (dev config overrides) - has less settings, more priority
                 Dictionary<string, Setting> highestPrioritySettings = activeSettingsReporitory.ElementAt(activeReposCount).Item2.ToDictionary(s => s.Key);

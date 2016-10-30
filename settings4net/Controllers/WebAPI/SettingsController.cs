@@ -1,10 +1,13 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using log4net;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using settings4net.Core.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
 
@@ -13,64 +16,35 @@ namespace settings4net.API.Controllers.WebAPI
     [RoutePrefix("api")]
     public class SettingsController : ApiController
     {
-
-        //public IReadableSettingsRepository SettingsRepository { get; set; }
+        private static ILog logger = LogManager.GetLogger(typeof(SettingsController));
 
         public SettingsController()
         {
-            // this.SettingsRepository = null;
         }
 
         [HttpGet]
-        [Route("environment/{env}/settings")]
+        [Route("applications/{app}/environments/{env}/settings")]
         [ResponseType(typeof(IList<Setting>))]
-        public HttpResponseMessage GetSettings(string env)
+        public async Task<HttpResponseMessage> GetSettings(string app, string env)
         {
-            if (string.IsNullOrEmpty(env))
-                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Invalid environment.");
-
-            IList<Setting> settings = new List<Setting>();
-            return Request.CreateResponse(settings);
+            logger.Debug(string.Format("GET applications/{0}/environments/{1}/settings", app, env));
+            return Request.CreateResponse(new List<Setting>()); 
         }
 
-        [HttpGet]
-        [Route("environment/{env}/settings/{key}")]
-        [ResponseType(typeof(Setting))]
-        public HttpResponseMessage GetSetting(string env, string key)
+        [HttpPost]
+        [Route("applications/{app}/environments/{env}/settings")]
+        public async Task<HttpResponseMessage> AddSetting(string app, string env, [FromBody] Setting setting)
         {
-            //if (string.IsNullOrEmpty(env))
-            //    return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Invalid environment.");
-
-            //if (string.IsNullOrEmpty(key))
-            //    return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Invalid setting key.");
-
-            //Setting setting = this.SettingsRepository.GetSetting(key, env);
-
-            //if (setting != null)
-            //    return Request.CreateResponse();
-            //else
-                return Request.CreateResponse(HttpStatusCode.NotFound, "Setting requested not found");
+            logger.Debug(string.Format("POST applications/{0}/environments/{1}/settings BODY: {2}", app, env, JsonConvert.SerializeObject(setting)));
+            return Request.CreateResponse(HttpStatusCode.Created);
         }
 
-
-        [HttpGet]
-        [Route("environment/{env}/settings/{key}/value")]
-        public HttpResponseMessage GetSettingValue(string env, string key)
+        [HttpPut]
+        [Route("applications/{app}/environments/{env}/settings/{key}")]
+        public async Task<HttpResponseMessage> AddOrUpdateSetting(string app, string env, [FromBody] Setting setting)
         {
-            //if (string.IsNullOrEmpty(env))
-            //    return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Invalid environment.");
-
-            //if (string.IsNullOrEmpty(key))
-            //    return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Invalid setting key.");
-
-            //Setting setting = this.SettingsRepository.GetSetting(key, env);
-
-            //if (setting != null)
-            //{
-            //    return Request.CreateResponse(new JObject(setting.JSONValue));
-            //}
-            //else
-                return Request.CreateResponse(HttpStatusCode.NotFound, "Setting requested not found");
+            logger.Debug(string.Format("POST applications/{0}/environments/{1}/settings BODY: {2}", app, env, JsonConvert.SerializeObject(setting)));
+            return Request.CreateResponse(HttpStatusCode.Created);
         }
 
     }

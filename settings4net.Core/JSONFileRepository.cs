@@ -12,7 +12,7 @@ using settings4net.Core.Model;
 
 namespace settings4net.Core
 {
-    public class JSONSettingsRepository : ISettingsRepository
+    public class JSONSettingsRepository : ISingleAppSettingsRepository
     {
         private static readonly string SETTINGS_FILE_NAME = "{0}_{1}_settings4net.json";
 
@@ -135,6 +135,11 @@ namespace settings4net.Core
                 if (rwlControl.IsWriteLockHeld)
                     rwlControl.ExitWriteLock();
             }
+        }
+
+        public void AddSetting(string currentEnvironment, Setting setting)
+        {
+            throw new NotImplementedException();
         }
     }
 }
