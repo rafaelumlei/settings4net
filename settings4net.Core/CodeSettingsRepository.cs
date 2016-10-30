@@ -10,7 +10,7 @@ using Newtonsoft.Json.Linq;
 
 namespace settings4net.Core
 {
-    public class CodeSettingsRepository : ISettingsRepository
+    public class CodeSettingsRepository : ISingleAppSettingsRepository
     {
         private static readonly string DEFAULT_ENVIRONMENT = "dev";
 
@@ -99,6 +99,11 @@ namespace settings4net.Core
                 object deserializedSettingValue = value.JSONValue.ToObject(settingToUpdate.SettingField.FieldType);
                 settingToUpdate.SettingField.SetValue(null, deserializedSettingValue);
             }
+        }
+
+        public void AddSetting(string currentEnvironment, Setting setting)
+        {
+            throw new NotImplementedException();
         }
     }
 }

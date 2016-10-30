@@ -7,8 +7,27 @@ using System.Threading.Tasks;
 
 namespace settings4net.Core.Interfaces
 {
-    public interface ISettingsRepository
+
+    /// <summary>
+    /// Interface to use when the application is available in the 
+    /// current context (eg. CurrentAppDomain) and because of that the 
+    /// repository will only deal with settings for a specific application.
+    /// Tipically, this repository will be the most common for Code/File repository.
+    /// </summary>
+    public interface ISingleAppSettingsRepository
     {
+        /// <summary>
+        /// Adds a new setting to the settings' repository 
+        /// </summary>
+        /// <param name="currentEnvironment">The environment in use (DEV, QA, ...)</param>
+        /// <param name="values">List of setting's values</param>
+        void AddSetting(string currentEnvironment, Setting setting);
+
+        /// <summary>
+        /// Gets all the settings available in the repository
+        /// </summary>
+        /// <param name="currentEnvironment">The environment in use (DEV, QA, ...)</param>
+        /// <param name="values">List of setting's values</param>
         List<Setting> GetSettings(string currentEnvironment);
 
         /// <summary>

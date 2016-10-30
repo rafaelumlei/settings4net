@@ -1,4 +1,5 @@
 ﻿using settings4net.Core;
+using settings4net.Core.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +12,10 @@ namespace Settings4Net.Console
     {
         static Program() 
         {
-            SettingsManager.InitializeSettings4net("dev", new CodeSettingsRepository(), new JSONSettingsRepository());
+            SettingsManager.InitializeSettings4net("dev",
+                new CodeSettingsRepository(), 
+                new JSONSettingsRepository(), 
+                new ApiSettingsRepository("http://localhost:8888/settings4net.API"));
         }
 
         static void Main(string[] args)
