@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Reflection;
 using System.Xml;
 using System.IO;
+using log4net;
 
 namespace settings4net.Core
 {
@@ -16,6 +17,8 @@ namespace settings4net.Core
     /// </summary>
     internal class XMLDocumentationLoader : IDocumentationLoader
     {
+        private static ILog logger = LogManager.GetLogger(typeof(XMLDocumentationLoader));
+
         private Assembly CurrentAssembly { get; set; }
 
         private XmlDocument AssemblyDocs { get; set; }
@@ -24,11 +27,10 @@ namespace settings4net.Core
         {
             this.CurrentAssembly = currentAssembly;
 
-            // extract this logic to the first access (to make it more lazy)
+            // extract this logic to the first access (to make it more lazy);
+            string dllPath = this.CurrentAssembly.Location;
             try
             {
-                string dllPath = this.CurrentAssembly.Location;
-
                 if (!string.IsNullOrEmpty(dllPath))
                 {
                     string xmlPath = Path.ChangeExtension(dllPath, ".XML");
@@ -39,7 +41,10 @@ namespace settings4net.Core
                     }
                 }
             }
-            catch { }
+            catch (Exception exp)
+            {
+                logger.Warn(string.Format("Expcetion when loading the xml documentation in {0}", dllPath), exp);
+            }
         }
 
         public XMLDocumentationLoader(Type impType) : this(impType.Assembly)

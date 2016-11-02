@@ -7,11 +7,14 @@ using System.Threading.Tasks;
 using settings4net.Core.Model;
 using settings4net.Core.RemoteRepositories.APIClient;
 using settings4net.Core.RemoteRepositories.Mappers;
+using log4net;
 
 namespace settings4net.Core.Repositories
 {
     public class ApiSettingsRepository : ISingleAppSettingsRepository
     {
+
+        private static ILog logger = LogManager.GetLogger(typeof(ApiSettingsRepository));
 
         private readonly object SettingsLoadingCtrl = new object();
 
@@ -42,7 +45,7 @@ namespace settings4net.Core.Repositories
                     }
                     catch (Exception exp)
                     {
-
+                        logger.Warn("Exception when loading settings from remote settings4net api", exp);
                     }
                 }
             }
@@ -58,7 +61,7 @@ namespace settings4net.Core.Repositories
             }
             catch (Exception exp)
             {
-
+                logger.Warn("Exception when adding setting to remote settings4net API", exp);
             }
         }
 

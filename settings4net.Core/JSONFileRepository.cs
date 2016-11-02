@@ -9,11 +9,14 @@ using Newtonsoft.Json;
 using System.Threading;
 using System.Collections.Concurrent;
 using settings4net.Core.Model;
+using log4net;
 
 namespace settings4net.Core
 {
     public class JSONSettingsRepository : ISingleAppSettingsRepository
     {
+        private static ILog logger = LogManager.GetLogger(typeof(JSONSettingsRepository));
+
         private static readonly string SETTINGS_FILE_NAME = "{0}_{1}_settings4net.json";
 
         private static readonly string APPLICATION_NAME;
@@ -50,7 +53,10 @@ namespace settings4net.Core
                             string text = File.ReadAllText(settingsFilePath);
                             return JsonConvert.DeserializeObject<List<Setting>>(text);
                         }
-                        catch { }
+                        catch (Exception exp)
+                        {
+                            logger.Warn("Exception getting settings from file.", exp);
+                        }
                     }
                 }
                 finally
@@ -68,8 +74,11 @@ namespace settings4net.Core
 
         public void OverrideState(string currentEnvironment, List<Setting> values)
         {
+            bool lockAlreadyHeldOnEntry = rwlControl.IsWriteLockHeld;
             if (!rwlControl.IsWriteLockHeld)
                 rwlControl.EnterWriteLock();
+            else
+                lockAlreadyHeldOnEntry = true;
 
             try
             {
@@ -79,11 +88,15 @@ namespace settings4net.Core
                     string settingsJsonText = JsonConvert.SerializeObject(values, Formatting.Indented);
                     File.WriteAllText(settingsFilePath, settingsJsonText);
                 }
-                catch { }
+                catch (Exception exp)
+                {
+                    logger.Warn("Exception writing new settings state to JSON file.", exp);
+                }
             }
             finally
             {
-                rwlControl.ExitWriteLock();
+                if (!lockAlreadyHeldOnEntry)
+                    rwlControl.ExitWriteLock();
             }
         }
 
@@ -97,9 +110,9 @@ namespace settings4net.Core
                     if (this.CurrentSettings.TryUpdate(value.Key, value, oldValue))
                         this.OverrideState(currentEnvironment, this.CurrentSettings.Values.ToList());
             }
-            catch
+            catch (Exception exp)
             {
-
+                logger.Warn("Error when updating setting.", exp);
             }
             finally
             {
@@ -126,9 +139,9 @@ namespace settings4net.Core
                 if (anyUpdated)
                     this.OverrideState(currentEnvironment, this.CurrentSettings.Values.ToList());
             }
-            catch
+            catch (Exception exp)
             {
-
+                logger.Warn("Exception when updating all settings and serializing them to file", exp);
             }
             finally
             {

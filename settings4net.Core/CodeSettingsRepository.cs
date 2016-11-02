@@ -85,13 +85,17 @@ namespace settings4net.Core
                 {
                     this.UpdateSetting(currentEnvironment, v);
                 }
-                catch { }
+                catch
+                {
+                    // Application has to start even if an repository is not working properly
+                    // TODO: add logging;
+                }
             });
         }
 
         public void UpdateSetting(string currentEnvironment, Setting value)
         {
-            SettingToCodeData settingToUpdate = null;
+            SettingToCodeData settingToUpdate;
             CurrentSettings.TryGetValue(value.Key, out settingToUpdate);
             if (settingToUpdate != null && settingToUpdate.SettingValue != value)
             {

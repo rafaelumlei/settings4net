@@ -68,10 +68,17 @@ namespace settings4net.Core.Model
 
         public static bool operator ==(Setting x, Setting y)
         {
-            return x.Application == y.Application
-                && x.Fullpath == y.Fullpath
-                && x.Documentation == y.Documentation
-                && JToken.DeepEquals(x.JSONValue, y.JSONValue);
+            if (object.ReferenceEquals(x, null) || object.ReferenceEquals(y, null))
+            {
+                return object.ReferenceEquals(x, null) && object.ReferenceEquals(y, null);
+            }
+            else
+            {
+                return x.Application == y.Application
+                    && x.Fullpath == y.Fullpath
+                    && x.Documentation == y.Documentation
+                    && JToken.DeepEquals(x.JSONValue, y.JSONValue);
+            }
         }
 
         public static bool operator !=(Setting x, Setting y)
