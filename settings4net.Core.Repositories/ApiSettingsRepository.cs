@@ -81,6 +81,10 @@ namespace settings4net.Core.Repositories
                 foreach (Setting setting in settingValues)
                     if (!CurrentSettings.ContainsKey(setting.Key))
                         this.AddSetting(currentEnvironment, setting);
+                // TODO: implement the delete all settings that are not locally and  
+                // are in the remote repo 
+                //
+                //    this.DeleteSetting()
             }
         }
 
