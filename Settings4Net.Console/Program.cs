@@ -15,7 +15,7 @@ namespace Settings4Net.Console
             SettingsManager.InitializeSettings4net("dev",
                 new CodeSettingsRepository(), 
                 new JSONSettingsRepository(), 
-                new ApiSettingsRepository("http://localhost:8888/settings4net.API"));
+                new ApiSettingsRepository("http://localhost/settings4net.API/"));
         }
 
         static void Main(string[] args)

@@ -4,11 +4,13 @@ using settings4net.Core.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using log4net;
 
 namespace settings4net.Core
 {
     public class SettingsManager
     {
+        private static ILog logger = LogManager.GetLogger(typeof(SettingsManager));
 
         public static void InitializeSettings4net(string currentEnvironment, bool remote = true)
         {
@@ -21,7 +23,7 @@ namespace settings4net.Core
 
             settingRepositoriesChain.ToList().ForEach(repository =>
             {
-                // some settings repositories may be offline, we have to check they are accessible or not
+                // some settings repositories may be offline, we have to check if they are accessible or not
                 try
                 {
                     var repoSettings = new Tuple<ISingleAppSettingsRepository, List<Setting>>(repository, repository.GetSettings(currentEnvironment));
@@ -29,7 +31,7 @@ namespace settings4net.Core
                 }
                 catch (Exception exp)
                 {
-                    Console.WriteLine(exp.ToString());
+                    logger.Error(string.Format("Error when loading settings from repository {0}", repository.ToString()), exp);
                 }
             });
 
