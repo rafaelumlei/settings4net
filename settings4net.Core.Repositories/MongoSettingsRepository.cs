@@ -49,69 +49,48 @@ namespace settings4net.Core.Repositories
 
         }
 
-        public void AddSetting(string application, string currentEnvironment, Setting setting)
+        public async Task AddSettingAsync(string application, string currentEnvironment, Setting setting)
         {
             try
             {
                 SettingMongo settingMongo = ModelToMongoMapper.Map(setting);
                 settingMongo.Created = settingMongo.Updated = DateTimeOffset.UtcNow;
-                this.SettingsCollection.InsertOne(settingMongo);
+                await this.SettingsCollection.InsertOneAsync(settingMongo).ConfigureAwait(false);
             }
             catch (Exception exp)
             {
                 logger.Warn(string.Format("Error adding setting {0} to mongo", setting.Key), exp);
+                throw;
+            }
+        }
+
+        public void AddSetting(string application, string currentEnvironment, Setting setting)
+        {
+            Task.Run(async () => await this.AddSettingAsync(application, currentEnvironment, setting)).RunSynchronously();
+        }
+
+        public async Task<List<Setting>> GetSettingsAsync(string application, string currentEnvironment)
+        {
+            try
+            {
+                var filter = Builders<SettingMongo>.Filter.Where(s => s.Application == application && s.Environment == currentEnvironment);
+                var result = await this.SettingsCollection.FindAsync<SettingMongo>(filter).ConfigureAwait(false);
+                return ModelToMongoMapper.Map(await result.ToListAsync().ConfigureAwait(false)).ToList();
+            }
+            catch (Exception exp)
+            {
+                logger.Warn(string.Format("Error getting settings from mongo for the app {0} and env {1}", application, currentEnvironment), exp);
+                throw;
             }
         }
 
         public List<Setting> GetSettings(string application, string currentEnvironment)
         {
-            try
-            {
-                IEnumerable<SettingMongo> settingsMongo = this.SettingsCollection.AsQueryable()
-                    .Where(s => s.Application == application && s.Environment == currentEnvironment);
-
-                return ModelToMongoMapper.Map(settingsMongo).ToList();
-            }
-            catch (Exception exp)
-            {
-                logger.Warn(string.Format("Error getting settings from mongo for the app {0} and env {1}", application, currentEnvironment), exp);
-            }
-
-            return new List<Setting>();
+            var result = Task.Run<List<Setting>>(async () => await this.GetSettingsAsync(application, currentEnvironment));
+            return result.Result;
         }
 
-        public void OverrideState(string application, string currentEnvironment, List<Setting> settings)
-        {
-            if (settings != null && settings.Any())
-            {
-                //IEnumerable<SettingMongo> settings = ModelToMongoMapper.Map(values);
-                foreach (var setting in settings)
-                {
-                    if (this.SettingsCollection.AsQueryable().Any(s => s.Key == setting.Key))
-                    {
-                        this.UpdateSetting(application, currentEnvironment, setting);
-                    }
-                    else
-                    {
-                        this.AddSetting(application, currentEnvironment, setting);
-                    }
-                }
-
-                // removing all the settings that were not provided and still exist in the collection
-                try
-                {
-                    string[] currentKeys = settings.Select(s => s.Key).ToArray();
-                    this.SettingsCollection.DeleteMany(model => !currentKeys.Contains(model.Key) && model.Environment == currentEnvironment);
-                }
-                catch (Exception exp)
-                {
-                    string log = string.Format("Error removing all obsolete settings for the app {0} and env {1}.", application, currentEnvironment);
-                    logger.Warn(log, exp);
-                }
-            }
-        }
-
-        public void UpdateSetting(string application, string currentEnvironment, Setting value)
+        public async Task UpdateSettingAsync(string application, string currentEnvironment, Setting value)
         {
             try
             {
@@ -121,23 +100,58 @@ namespace settings4net.Core.Repositories
                                                           .Set(s => s.JSONValue, settingMongo.JSONValue)
                                                           .Set(s => s.Updated, DateTimeOffset.UtcNow);
 
-                this.SettingsCollection.UpdateOne(filter, update);
+                await this.SettingsCollection.UpdateOneAsync(filter, update).ConfigureAwait(false);
             }
             catch (Exception exp)
             {
                 logger.Warn(string.Format("Error while updating setting {0} into mongo", value.Key), exp);
+                throw;
             }
         }
 
-        public void UpdateSettings(string application, string currentEnvironment, List<Setting> settings)
+        public void UpdateSetting(string application, string currentEnvironment, Setting value)
         {
+            Task.Run(async () => await this.UpdateSettingAsync(application, currentEnvironment, value)).RunSynchronously();
+        }
+
+        public async Task UpdateSettingsAsync(string application, string currentEnvironment, List<Setting> settings)
+        {
+            List<Task> tasks = new List<Task>();
+
             if (settings != null && settings.Any())
             {
                 foreach (var setting in settings)
                 {
-                    this.UpdateSetting(application, currentEnvironment, setting);
+                    tasks.Add(this.UpdateSettingAsync(application, currentEnvironment, setting));
                 }
             }
+
+            await Task.WhenAll(tasks).ConfigureAwait(false);
         }
+        
+        public void UpdateSettings(string application, string currentEnvironment, List<Setting> settings)
+        {
+            Task.Run<Task>(async () => await this.UpdateSettingsAsync(application, currentEnvironment, settings)).RunSynchronously();
+        }
+
+        public async Task DeleteSettingAsync(string application, string currentEnvironment, string fullpath)
+        {
+            try
+            {
+                var filter = Builders<SettingMongo>.Filter.Where(s => s.Application == application && s.Environment == currentEnvironment && s.Fullpath == fullpath);
+                await this.SettingsCollection.DeleteOneAsync(filter);
+            }
+            catch (Exception exp)
+            {
+                logger.Warn(string.Format("Error while deleting setting {0}:{1}:{2} into mongo", application, currentEnvironment, fullpath), exp);
+                throw;
+            }
+        }
+
+        public void DeleteSetting(string application, string currentEnvironment, string fullpath)
+        {
+            Task.Run(async () => await this.DeleteSettingAsync(application, currentEnvironment, fullpath)).RunSynchronously();
+        }
+
     }
 }

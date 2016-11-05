@@ -26,6 +26,8 @@ namespace settings4net.Core.Interfaces
         /// <param name="values">List of setting's values</param>
         void AddSetting(string application, string currentEnvironment, Setting setting);
 
+        Task AddSettingAsync(string application, string currentEnvironment, Setting setting);
+
         /// <summary>
         /// Gets all the settings available in the repository
         /// </summary>
@@ -33,6 +35,8 @@ namespace settings4net.Core.Interfaces
         /// <param name="currentEnvironment">The environment in use (DEV, QA, ...)</param>
         /// <param name="values">List of setting's values</param>
         List<Setting> GetSettings(string application, string currentEnvironment);
+
+        Task<List<Setting>> GetSettingsAsync(string application, string currentEnvironment);
 
         /// <summary>
         /// Updates settings' values (if they don't exist they are not added)
@@ -50,14 +54,17 @@ namespace settings4net.Core.Interfaces
         /// <param name="values">List of setting's values</param>
         void UpdateSetting(string application, string currentEnvironment, Setting value);
 
+        Task UpdateSettingAsync(string application, string currentEnvironment, Setting value);
+
         /// <summary>
-        /// Overrides the current repository with the new repository's values/state
-        /// * the ones that don't exist in this list are removed from the repository;
-        /// * the ones that exist are updated with the new values;
+        /// Delete setting from the repository
         /// </summary>
         /// <param name="application">The application owner of the settings</param>
         /// <param name="currentEnvironment">The environment in use (DEV, QA, ...)</param>
-        /// <param name="values">List of setting's values</param>
-        void OverrideState(string application, string currentEnvironment, List<Setting> values);
+        /// <param name="fullpath">The fullpath of the setting to delete</param>
+        void DeleteSetting(string application, string currentEnvironment, string fullpath);
+
+        Task DeleteSettingAsync(string application, string currentEnvironment, string fullpath);
+
     }
 }
