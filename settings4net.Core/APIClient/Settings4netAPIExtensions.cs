@@ -4,7 +4,7 @@
 using System;
 using System.Linq;
 
-namespace settings4net.Core.RemoteRepositories.APIClient
+namespace settings4net.Core.APIClient
 {
     public static partial class Settings4netAPIExtensions
     {

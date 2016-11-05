@@ -5,6 +5,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using log4net;
+using System.Threading.Tasks;
+using settings4net.Core.Repositories;
 
 namespace settings4net.Core
 {
@@ -12,34 +14,42 @@ namespace settings4net.Core
     {
         private static ILog logger = LogManager.GetLogger(typeof(SettingsManager));
 
-        public static void InitializeSettings4net(string currentEnvironment, bool remote = true)
+        public static void InitializeSettings4net(string currentEnvironment, bool withRemote = true)
         {
-            InitializeSettings4net(currentEnvironment, new CodeSettingsRepository(), new JSONSettingsRepository());
+            InitializeSettings4netAsync(withRemote).Wait();
         }
 
-        public static void InitializeSettings4net(string currentEnvironment, params ISingleAppSettingsRepository[] settingRepositoriesChain)
+        public static async Task InitializeSettings4netAsync(bool withRemote = true)
+        {
+            if (withRemote)
+                await InitializeSettings4netAsync(new CodeSettingsRepository(), new JSONSettingsRepository(), new ApiSettingsRepository()).ConfigureAwait(false);
+            else 
+                await InitializeSettings4netAsync(new CodeSettingsRepository(), new JSONSettingsRepository()).ConfigureAwait(false);
+        }
+
+        public static async Task InitializeSettings4netAsync(params ISingleAppSettingsRepository[] settingRepositoriesChain)
         {
             List<Tuple<ISingleAppSettingsRepository, List<Setting>>> activeSettingsReporitory = new List<Tuple<ISingleAppSettingsRepository, List<Setting>>>();
 
-            settingRepositoriesChain.ToList().ForEach(repository =>
+            foreach (var repository in settingRepositoriesChain)
             {
                 // some settings repositories may be offline, we have to check if they are accessible or not
                 try
                 {
-                    var repoSettings = new Tuple<ISingleAppSettingsRepository, List<Setting>>(repository, repository.GetSettings(currentEnvironment));
+                    var repoSettings = new Tuple<ISingleAppSettingsRepository, List<Setting>>(repository, await repository.GetSettingsAsync().ConfigureAwait(false));
                     activeSettingsReporitory.Add(repoSettings);
                 }
                 catch (Exception exp)
                 {
                     logger.Error(string.Format("Error when loading settings from repository {0}", repository.ToString()), exp);
                 }
-            });
+            }
 
-            // if more than one repository available
+            // if more than one settings repository available
             int activeReposCount = activeSettingsReporitory.Count() - 1;
             if (activeReposCount >= 1)
             {
-                // lowest relevant: tipically the default setttings that come from the code (dev environment) - has more settings, less priority
+                // lowest relevant: tipically the default setttings that come from the code (dev environment) - has all settings, but the values have less priority
                 Tuple<ISingleAppSettingsRepository, List<Setting>> lowestPriority = activeSettingsReporitory.ElementAt(0);
 
                 // highest relevant: tipically the setttings that come from DB or remote repositories (dev config overrides) - has less settings, more priority
@@ -56,15 +66,20 @@ namespace settings4net.Core
                     });
                 }
 
-                lowestPriority.Item1.UpdateSettings(currentEnvironment, highestPrioritySettings.Values.ToList());
-                List<Setting> currentSettings = lowestPriority.Item1.GetSettings(currentEnvironment);
+                lowestPriority.Item1.UpdateSettings(highestPrioritySettings.Values.ToList());
+                List<Setting> currentSettings = await lowestPriority.Item1.GetSettingsAsync().ConfigureAwait(false);
 
                 // from lowest to highest priority, setting all equal to the lowest priority one
                 for (int i = 1; i <= activeReposCount; i++)
                 {
-                    activeSettingsReporitory.ElementAt(i).Item1.OverrideState(currentEnvironment, currentSettings);
+                    await activeSettingsReporitory.ElementAt(i).Item1.OverrideStateAsync(currentSettings).ConfigureAwait(false);
                 }
             }
+        }
+
+        public static void InitializeSettings4net(params ISingleAppSettingsRepository[] settingRepositoriesChain)
+        {
+            InitializeSettings4netAsync(settingRepositoriesChain).Wait();
         }
 
     }

@@ -12,10 +12,10 @@ namespace Settings4Net.Console
     {
         static Program() 
         {
-            SettingsManager.InitializeSettings4net("dev",
-                new CodeSettingsRepository(), 
-                new JSONSettingsRepository(), 
-                new ApiSettingsRepository("http://localhost/settings4net.API/"));
+            SettingsManager.InitializeSettings4net(
+                new CodeSettingsRepository(),
+                new JSONSettingsRepository(),
+                new ApiSettingsRepository(baseUri: "http://localhost/settings4net.API/"));
         }
 
         static void Main(string[] args)

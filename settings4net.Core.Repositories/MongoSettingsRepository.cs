@@ -5,7 +5,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using settings4net.Core.Model;
-using settings4net.Core.RemoteRepositories.APIClient;
 using settings4net.Core.RemoteRepositories.Mappers;
 using MongoDB.Driver;
 using settings4net.Core.RemoteRepositories.Models;
@@ -46,7 +45,6 @@ namespace settings4net.Core.Repositories
                 logger.Error("Expcetion when setting up Mongo Connection/DB/Collection for the settings4net", exp);
                 throw;
             }
-
         }
 
         public async Task AddSettingAsync(string application, string currentEnvironment, Setting setting)
@@ -66,7 +64,7 @@ namespace settings4net.Core.Repositories
 
         public void AddSetting(string application, string currentEnvironment, Setting setting)
         {
-            Task.Run(async () => await this.AddSettingAsync(application, currentEnvironment, setting)).RunSynchronously();
+            this.AddSettingAsync(application, currentEnvironment, setting).RunSynchronously();
         }
 
         public async Task<List<Setting>> GetSettingsAsync(string application, string currentEnvironment)
@@ -86,7 +84,7 @@ namespace settings4net.Core.Repositories
 
         public List<Setting> GetSettings(string application, string currentEnvironment)
         {
-            var result = Task.Run<List<Setting>>(async () => await this.GetSettingsAsync(application, currentEnvironment));
+            var result = this.GetSettingsAsync(application, currentEnvironment);
             return result.Result;
         }
 
@@ -111,7 +109,7 @@ namespace settings4net.Core.Repositories
 
         public void UpdateSetting(string application, string currentEnvironment, Setting value)
         {
-            Task.Run(async () => await this.UpdateSettingAsync(application, currentEnvironment, value)).RunSynchronously();
+            this.UpdateSettingAsync(application, currentEnvironment, value).RunSynchronously();
         }
 
         public async Task UpdateSettingsAsync(string application, string currentEnvironment, List<Setting> settings)
@@ -131,7 +129,7 @@ namespace settings4net.Core.Repositories
         
         public void UpdateSettings(string application, string currentEnvironment, List<Setting> settings)
         {
-            Task.Run<Task>(async () => await this.UpdateSettingsAsync(application, currentEnvironment, settings)).RunSynchronously();
+            this.UpdateSettingsAsync(application, currentEnvironment, settings).RunSynchronously();
         }
 
         public async Task DeleteSettingAsync(string application, string currentEnvironment, string fullpath)
@@ -150,7 +148,7 @@ namespace settings4net.Core.Repositories
 
         public void DeleteSetting(string application, string currentEnvironment, string fullpath)
         {
-            Task.Run(async () => await this.DeleteSettingAsync(application, currentEnvironment, fullpath)).RunSynchronously();
+            this.DeleteSettingAsync(application, currentEnvironment, fullpath).RunSynchronously();
         }
 
     }

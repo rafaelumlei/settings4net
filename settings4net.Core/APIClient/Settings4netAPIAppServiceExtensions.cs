@@ -2,7 +2,7 @@
 using System.Net.Http;
 using Microsoft.Azure.AppService;
 
-namespace settings4net.Core.RemoteRepositories.APIClient
+namespace settings4net.Core.APIClient
 {
     public static class Settings4netAPIAppServiceExtensions
     {

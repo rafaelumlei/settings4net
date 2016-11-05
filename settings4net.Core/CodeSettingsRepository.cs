@@ -7,105 +7,149 @@ using System.Threading.Tasks;
 using settings4net.Core.Model;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using log4net;
+using System.Configuration;
 
 namespace settings4net.Core
 {
     public class CodeSettingsRepository : ISingleAppSettingsRepository
     {
-        private static readonly string DEFAULT_ENVIRONMENT = "dev";
+        private static readonly ILog logger = LogManager.GetLogger(typeof(CodeSettingsRepository));
+
+        private static readonly string SETTINGS4NET_ENV_CONF_KEY = "Settings4netCurrentEnvironment";
 
         private object settingsAccessSync = new object();
 
-        private Dictionary<string, SettingToCodeData> currentSettings = null;
+        private Dictionary<string, SettingToCodeData> CurrentSettings { get; set; }
 
-        private Dictionary<string, SettingToCodeData> CurrentSettings
+        private string CurrentEnvironment { get; set; }
+
+        private string CurrentApplication { get; set; }
+
+        public CodeSettingsRepository(string currentEnv = null)
         {
-            get
+            if (string.IsNullOrEmpty(currentEnv))
             {
-                this.LoadCodeSettings();
-                return currentSettings;
+                currentEnv = ConfigurationManager.AppSettings[SETTINGS4NET_ENV_CONF_KEY];
+
+                if (string.IsNullOrEmpty(currentEnv))
+                    throw new ArgumentException("Settings4netCurrentEnvironment not correctly defined in ConfigurationManager.AppSettings");
             }
+
+            this.CurrentEnvironment = currentEnv;
+            this.CurrentApplication = AppDomain.CurrentDomain.FriendlyName;
+            this.LoadCodeSettings();
         }
 
         private void LoadCodeSettings()
         {
-            lock (settingsAccessSync)
+            if (this.CurrentSettings == null)
             {
-                if (currentSettings == null)
+                lock (settingsAccessSync)
                 {
-                    Type settingsMarkType = typeof(ISettingsClass);
-
-                    List<Type> settingsContainers = AppDomain.CurrentDomain.GetAssemblies()
-                        .SelectMany(s => s.GetTypes())
-                        .Where(p => p.IsClass && settingsMarkType.IsAssignableFrom(p))
-                        .ToList();
-
-                    currentSettings = new Dictionary<string, SettingToCodeData>();
-                    string applicationName = AppDomain.CurrentDomain.FriendlyName;
-
-                    // extract to converter 
-                    settingsContainers.ForEach(t =>
+                    if (this.CurrentSettings == null)
                     {
-                        XMLDocumentationLoader documentationLoader = new XMLDocumentationLoader(t);
+                        Type settingsMarkType = typeof(ISettingsClass);
 
-                        t.GetFields().Where(f => f.IsPublic).ToList().ForEach(f =>
+                        List<Type> settingsContainers = AppDomain.CurrentDomain.GetAssemblies()
+                            .SelectMany(s => s.GetTypes())
+                            .Where(p => p.IsClass && settingsMarkType.IsAssignableFrom(p))
+                            .ToList();
+
+                        this.CurrentSettings = new Dictionary<string, SettingToCodeData>();
+                        
+
+                        // extract to converter 
+                        settingsContainers.ForEach(t =>
                         {
-                            string fullpath = t.FullName + "." + f.Name;
-                            JToken jsonValue = JToken.FromObject(f.GetValue(null));
-                            string documentation = documentationLoader.GetDocumentation(f);
+                            XMLDocumentationLoader documentationLoader = new XMLDocumentationLoader(t);
 
-                            SettingToCodeData settingToCode = new SettingToCodeData()
+                            t.GetFields().Where(f => f.IsPublic).ToList().ForEach(f =>
                             {
-                                SettingValue = new Setting(applicationName, DEFAULT_ENVIRONMENT, fullpath, jsonValue, documentation),
-                                SettingField = f
-                            };
+                                string fullpath = t.FullName + "." + f.Name;
+                                JToken jsonValue = JToken.FromObject(f.GetValue(null));
+                                string documentation = documentationLoader.GetDocumentation(f);
 
-                            currentSettings.Add(settingToCode.SettingValue.Key, settingToCode);
+                                SettingToCodeData settingToCode = new SettingToCodeData()
+                                {
+                                    SettingValue = new Setting(this.CurrentApplication, this.CurrentEnvironment, fullpath, jsonValue, documentation),
+                                    SettingField = f
+                                };
+
+                                this.CurrentSettings.Add(settingToCode.SettingValue.Key, settingToCode);
+                            });
                         });
-                    });
+                    }
                 }
             }
         }
 
-        public List<Setting> GetSettings(string currentEnvironment)
+        public Task<List<Setting>> GetSettingsAsync()
+        {
+            return Task.FromResult<List<Setting>>(this.GetSettings());
+        }
+
+        public List<Setting> GetSettings()
         {
             return CurrentSettings.Values.Select(s => s.SettingValue).ToList();
         }
 
-        public void OverrideState(string currentEnvironment, List<Setting> values)
+        public Task OverrideStateAsync(List<Setting> values)
         {
             throw new NotImplementedException();
         }
 
-        public void UpdateSettings(string currentEnvironment, List<Setting> newValues)
+        public void OverrideState(List<Setting> values)
         {
-            newValues.ForEach(v => 
-            {
-                try
-                {
-                    this.UpdateSetting(currentEnvironment, v);
-                }
-                catch
-                {
-                    // Application has to start even if an repository is not working properly
-                    // TODO: add logging;
-                }
-            });
+            throw new NotImplementedException();
         }
 
-        public void UpdateSetting(string currentEnvironment, Setting value)
+        public async Task UpdateSettingsAsync(List<Setting> values)
+        {
+            this.UpdateSettings(values);
+        }
+
+        public void UpdateSettings(List<Setting> newValues)
+        {
+            foreach (Setting setting in newValues)
+            {
+                this.UpdateSetting(setting);
+            }
+        }
+
+        public async Task UpdateSettingAsync(Setting value)
+        {
+            this.UpdateSetting(value);
+        }
+
+        public void UpdateSetting(Setting value)
         {
             SettingToCodeData settingToUpdate;
             CurrentSettings.TryGetValue(value.Key, out settingToUpdate);
             if (settingToUpdate != null && settingToUpdate.SettingValue != value)
             {
                 settingToUpdate.SettingValue.Update(value);
-                object deserializedSettingValue = value.JSONValue.ToObject(settingToUpdate.SettingField.FieldType);
+                object deserializedSettingValue = JsonConvert.DeserializeObject(value.JSONValue.ToString(), settingToUpdate.SettingField.FieldType);
                 settingToUpdate.SettingField.SetValue(null, deserializedSettingValue);
             }
         }
 
-        public void AddSetting(string currentEnvironment, Setting setting)
+        public Task AddSettingAsync(Setting setting)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void AddSetting(Setting setting)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void DeleteSetting(string fullpath)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task DeleteSettingAsync(string fullpath)
         {
             throw new NotImplementedException();
         }

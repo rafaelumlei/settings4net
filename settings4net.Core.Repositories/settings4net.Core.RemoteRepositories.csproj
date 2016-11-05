@@ -93,18 +93,7 @@
     <Compile Include="Mappers\ModelToMongoMapper.cs" />
     <Compile Include="Models\SettingMongo.cs" />
     <Compile Include="MongoSettingsRepository.cs" />
-    <Compile Include="Mappers\ModelToAPIMapper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ApiSettingsRepository.cs" />
-    <Compile Include="APIClient\ISettings.cs" />
-    <Compile Include="APIClient\ISettings4netAPI.cs" />
-    <Compile Include="APIClient\Models\Setting.cs" />
-    <Compile Include="APIClient\Models\SettingCollection.cs" />
-    <Compile Include="APIClient\Settings.cs" />
-    <Compile Include="APIClient\Settings4netAPI.cs" />
-    <Compile Include="APIClient\Settings4netAPIAppServiceExtensions.cs" />
-    <Compile Include="APIClient\Settings4netAPIExtensions.cs" />
-    <Compile Include="APIClient\SettingsExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\settings4net.Core\settings4net.Core.csproj">
