@@ -19,7 +19,7 @@ namespace settings4net.Core.RemoteRepositories.Mappers
                 Documentation = setting.Documentation,
                 Environment = setting.Environment,
                 Fullpath = setting.Fullpath,
-                JSONValue = JsonConvert.SerializeObject(setting.JSONValue)
+                JSONValue = setting.JSONValue.ToString()
             };
         }
 

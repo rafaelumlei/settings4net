@@ -14,7 +14,7 @@ namespace settings4net.Core
     {
         private static ILog logger = LogManager.GetLogger(typeof(SettingsManager));
 
-        public static void InitializeSettings4net(string currentEnvironment, bool withRemote = true)
+        public static void InitializeSettings4net(bool withRemote = true)
         {
             InitializeSettings4netAsync(withRemote).Wait();
         }
