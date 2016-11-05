@@ -7,29 +7,12 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Rest;
-using settings4net.Core.RemoteRepositories.APIClient.Models;
+using settings4net.Core.APIClient.Models;
 
-namespace settings4net.Core.RemoteRepositories.APIClient
+namespace settings4net.Core.APIClient
 {
     public partial interface ISettings
     {
-        /// <param name='app'>
-        /// Required.
-        /// </param>
-        /// <param name='env'>
-        /// Required.
-        /// </param>
-        /// <param name='setting'>
-        /// Required.
-        /// </param>
-        /// <param name='key'>
-        /// Required.
-        /// </param>
-        /// <param name='cancellationToken'>
-        /// Cancellation token.
-        /// </param>
-        Task<HttpOperationResponse<string>> AddOrUpdateSettingWithOperationResponseAsync(string app, string env, Setting setting, string key, CancellationToken cancellationToken = default(System.Threading.CancellationToken));
-        
         /// <param name='app'>
         /// Required.
         /// </param>
@@ -50,9 +33,40 @@ namespace settings4net.Core.RemoteRepositories.APIClient
         /// <param name='env'>
         /// Required.
         /// </param>
+        /// <param name='fullpath'>
+        /// Required.
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// Cancellation token.
+        /// </param>
+        Task<HttpOperationResponse<string>> DeleteSettingWithOperationResponseAsync(string app, string env, string fullpath, CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        
+        /// <param name='app'>
+        /// Required.
+        /// </param>
+        /// <param name='env'>
+        /// Required.
+        /// </param>
         /// <param name='cancellationToken'>
         /// Cancellation token.
         /// </param>
         Task<HttpOperationResponse<IList<Setting>>> GetSettingsWithOperationResponseAsync(string app, string env, CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        
+        /// <param name='app'>
+        /// Required.
+        /// </param>
+        /// <param name='env'>
+        /// Required.
+        /// </param>
+        /// <param name='fullpath'>
+        /// Required.
+        /// </param>
+        /// <param name='setting'>
+        /// Required.
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// Cancellation token.
+        /// </param>
+        Task<HttpOperationResponse<string>> UpdateSettingWithOperationResponseAsync(string app, string env, string fullpath, Setting setting, CancellationToken cancellationToken = default(System.Threading.CancellationToken));
     }
 }

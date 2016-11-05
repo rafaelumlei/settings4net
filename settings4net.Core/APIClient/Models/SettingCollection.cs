@@ -5,9 +5,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json.Linq;
-using settings4net.Core.RemoteRepositories.APIClient.Models;
+using settings4net.Core.APIClient.Models;
 
-namespace settings4net.Core.RemoteRepositories.APIClient.Models
+namespace settings4net.Core.APIClient.Models
 {
     public static partial class SettingCollection
     {

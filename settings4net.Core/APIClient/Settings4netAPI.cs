@@ -5,9 +5,9 @@ using System;
 using System.Linq;
 using System.Net.Http;
 using Microsoft.Rest;
-using settings4net.Core.RemoteRepositories;
+using settings4net.Core.APIClient;
 
-namespace settings4net.Core.RemoteRepositories.APIClient
+namespace settings4net.Core.APIClient
 {
     public partial class Settings4netAPI : ServiceClient<Settings4netAPI>, ISettings4netAPI
     {

@@ -4,9 +4,9 @@
 using System;
 using System.Linq;
 using Microsoft.Rest;
-using settings4net.Core.RemoteRepositories;
+using settings4net.Core.APIClient;
 
-namespace settings4net.Core.RemoteRepositories.APIClient
+namespace settings4net.Core.APIClient
 {
     public partial interface ISettings4netAPI : IDisposable
     {

@@ -5,7 +5,7 @@ using System;
 using System.Linq;
 using Newtonsoft.Json.Linq;
 
-namespace settings4net.Core.RemoteRepositories.APIClient.Models
+namespace settings4net.Core.APIClient.Models
 {
     public partial class Setting
     {

@@ -16,41 +16,55 @@ namespace settings4net.Core.Interfaces
     /// </summary>
     public interface ISingleAppSettingsRepository
     {
+
         /// <summary>
         /// Adds a new setting to the settings' repository 
         /// </summary>
-        /// <param name="currentEnvironment">The environment in use (DEV, QA, ...)</param>
         /// <param name="values">List of setting's values</param>
-        void AddSetting(string currentEnvironment, Setting setting);
+        void AddSetting(Setting setting);
+
+        Task AddSettingAsync(Setting setting);
 
         /// <summary>
         /// Gets all the settings available in the repository
         /// </summary>
-        /// <param name="currentEnvironment">The environment in use (DEV, QA, ...)</param>
         /// <param name="values">List of setting's values</param>
-        List<Setting> GetSettings(string currentEnvironment);
+        List<Setting> GetSettings();
+
+        Task<List<Setting>> GetSettingsAsync();
 
         /// <summary>
         /// Updates settings' values (if they don't exist they are not added)
         /// </summary>
-        /// <param name="currentEnvironment">The environment in use (DEV, QA, ...)</param>
         /// <param name="values">List of setting's values</param>
-        void UpdateSettings(string currentEnvironment, List<Setting> values);
+        void UpdateSettings(List<Setting> values);
+
+        Task UpdateSettingsAsync(List<Setting> values);
 
         /// <summary>
         /// Updates setting's value (if it doesn't exist it is not added)
         /// </summary>
-        /// <param name="currentEnvironment">The environment in use (DEV, QA, ...)</param>
         /// <param name="values">List of setting's values</param>
-        void UpdateSetting(string currentEnvironment, Setting value);
+        void UpdateSetting(Setting value);
+
+        Task UpdateSettingAsync(Setting value);
+
+        /// <summary>
+        /// Deletes setting from the respository
+        /// </summary>
+        /// <param name="fullpath">The setting fullpath</param>
+        void DeleteSetting(string fullpath);
+
+        Task DeleteSettingAsync(string fullpath);
 
         /// <summary>
         /// Overrides the current repository with the new repository's values/state
         /// * the ones that don't exist in this list are removed from the repository;
         /// * the ones that exist are updated with the new values;
         /// </summary>
-        /// <param name="currentEnvironment">The environment in use (DEV, QA, ...)</param>
         /// <param name="values">List of setting's values</param>
-        void OverrideState(string currentEnvironment, List<Setting> values);
+        void OverrideState(List<Setting> values);
+
+        Task OverrideStateAsync(List<Setting> values);
     }
 }

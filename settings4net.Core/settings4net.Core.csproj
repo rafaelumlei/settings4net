@@ -81,10 +81,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="APIClient\ISettings.cs" />
+    <Compile Include="APIClient\ISettings4netAPI.cs" />
+    <Compile Include="APIClient\Models\Setting.cs" />
+    <Compile Include="APIClient\Models\SettingCollection.cs" />
+    <Compile Include="APIClient\Settings.cs" />
+    <Compile Include="APIClient\Settings4netAPI.cs" />
+    <Compile Include="APIClient\Settings4netAPIAppServiceExtensions.cs" />
+    <Compile Include="APIClient\Settings4netAPIExtensions.cs" />
+    <Compile Include="APIClient\SettingsExtensions.cs" />
+    <Compile Include="ApiSettingsRepository.cs" />
     <Compile Include="CodeSettingsRepository.cs" />
     <Compile Include="Interfaces\IMultiAppSettingsRepository.cs" />
     <Compile Include="Interfaces\ISingleAppSettingsRepository.cs" />
     <Compile Include="JSONFileRepository.cs" />
+    <Compile Include="Mappers\ModelToAPIMapper.cs" />
     <Compile Include="Models\Setting.cs" />
     <Compile Include="XMLDocumentationLoader.cs" />
     <Compile Include="Interfaces\IDocumentationLoader.cs" />
@@ -97,9 +108,7 @@
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Remote\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

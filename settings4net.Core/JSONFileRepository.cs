@@ -10,6 +10,7 @@ using System.Threading;
 using System.Collections.Concurrent;
 using settings4net.Core.Model;
 using log4net;
+using System.Configuration;
 
 namespace settings4net.Core
 {
@@ -17,76 +18,90 @@ namespace settings4net.Core
     {
         private static ILog logger = LogManager.GetLogger(typeof(JSONSettingsRepository));
 
+        private static readonly string SETTINGS4NET_ENV_CONF_KEY = "Settings4netCurrentEnvironment";
+
         private static readonly string SETTINGS_FILE_NAME = "{0}_{1}_settings4net.json";
 
-        private static readonly string APPLICATION_NAME;
+        private string SettingsFileDirectory;
 
-        private static string SettingsFileDirectory;
+        private ConcurrentDictionary<string, Setting> CurrentSettings;
 
-        private ConcurrentDictionary<string, Setting> CurrentSettings { get; set; }
+        private SemaphoreSlim rwControl = new SemaphoreSlim(1);
 
-        private ReaderWriterLockSlim rwlControl = new ReaderWriterLockSlim();
+        private string CurrentApplication { get; set; }
 
-        static JSONSettingsRepository()
+        private string CurrentEnvironment { get; set; }
+
+        public JSONSettingsRepository(string currentEnv = null)
         {
-            string appname = AppDomain.CurrentDomain.FriendlyName;
-            SettingsFileDirectory = AppDomain.CurrentDomain.BaseDirectory;
-            APPLICATION_NAME = appname;
-        }
-
-        public List<Setting> GetSettings(string currentEnvironment)
-        {
-            rwlControl.EnterUpgradeableReadLock();
-            try
+            if (string.IsNullOrEmpty(currentEnv))
             {
-                if (CurrentSettings != null)
-                    return CurrentSettings.Values.ToList();
+                currentEnv = ConfigurationManager.AppSettings[SETTINGS4NET_ENV_CONF_KEY];
 
-                rwlControl.EnterWriteLock();
-                try
-                {
-                    string settingsFilePath = SettingsFileDirectory + string.Format(SETTINGS_FILE_NAME, APPLICATION_NAME, currentEnvironment);
-                    if (File.Exists(settingsFilePath))
-                    {
-                        try
-                        {
-                            string text = File.ReadAllText(settingsFilePath);
-                            return JsonConvert.DeserializeObject<List<Setting>>(text);
-                        }
-                        catch (Exception exp)
-                        {
-                            logger.Warn("Exception getting settings from file.", exp);
-                        }
-                    }
-                }
-                finally
-                {
-                    rwlControl.ExitWriteLock();
-                }
-            }
-            finally
-            {
-                rwlControl.ExitUpgradeableReadLock();
+                if (string.IsNullOrEmpty(currentEnv))
+                    throw new ArgumentException("Settings4netCurrentEnvironment not correctly defined in ConfigurationManager.AppSettings");
             }
 
-            return new List<Setting>();
+            this.SettingsFileDirectory = AppDomain.CurrentDomain.BaseDirectory;
+            this.CurrentApplication = AppDomain.CurrentDomain.FriendlyName;
+            this.CurrentEnvironment = currentEnv;
+            var task = this.LoadSettingsFromFile();
+            this.CurrentSettings = task.Result;
         }
 
-        public void OverrideState(string currentEnvironment, List<Setting> values)
+        private async Task<ConcurrentDictionary<string, Setting>> LoadSettingsFromFile()
         {
-            bool lockAlreadyHeldOnEntry = rwlControl.IsWriteLockHeld;
-            if (!rwlControl.IsWriteLockHeld)
-                rwlControl.EnterWriteLock();
-            else
-                lockAlreadyHeldOnEntry = true;
+            if (this.CurrentSettings != null)
+                return this.CurrentSettings;
 
-            try
+            string settingsFilePath = SettingsFileDirectory + string.Format(SETTINGS_FILE_NAME, this.CurrentApplication, this.CurrentEnvironment);
+            if (File.Exists(settingsFilePath))
             {
                 try
                 {
-                    string settingsFilePath = SettingsFileDirectory + string.Format(SETTINGS_FILE_NAME, APPLICATION_NAME, currentEnvironment);
-                    string settingsJsonText = JsonConvert.SerializeObject(values, Formatting.Indented);
-                    File.WriteAllText(settingsFilePath, settingsJsonText);
+                    string text = string.Empty;
+
+                    using (var reader = new StreamReader(settingsFilePath))
+                        text = await reader.ReadToEndAsync().ConfigureAwait(false);
+
+                    var result = await Task.Factory.StartNew(() => JsonConvert.DeserializeObject<List<Setting>>(text)).ConfigureAwait(false);
+                    this.CurrentSettings = new ConcurrentDictionary<string, Setting>(result.ToDictionary(s => s.Key));
+                    return CurrentSettings;
+                }
+                catch (Exception exp)
+                {
+                    logger.Warn("Exception getting settings from file.", exp);
+                }
+            }
+
+            return this.CurrentSettings ?? new ConcurrentDictionary<string, Setting>();
+        }
+
+        public async Task<List<Setting>> GetSettingsAsync()
+        {
+            return this.CurrentSettings.Values.ToList();
+        }
+
+        public List<Setting> GetSettings()
+        {
+            var task = this.GetSettingsAsync();
+            return task.Result;
+        }
+
+        private async Task OverrideStateAsyncImpl(List<Setting> values, bool lockAlreadyHeld = false)
+        {
+            if (!lockAlreadyHeld)
+                await this.rwControl.WaitAsync().ConfigureAwait(false);
+
+            try
+            {
+                try
+                {
+                    string settingsFilePath = SettingsFileDirectory + string.Format(SETTINGS_FILE_NAME, this.CurrentApplication, this.CurrentEnvironment);
+                    string settingsJsonText = await Task.Factory.StartNew(() => JsonConvert.SerializeObject(values, Formatting.Indented)).ConfigureAwait(false);
+
+                    using (var writer = new StreamWriter(settingsFilePath))
+                        await writer.WriteAsync(settingsJsonText).ConfigureAwait(false);
                 }
                 catch (Exception exp)
                 {
@@ -95,20 +110,32 @@ namespace settings4net.Core
             }
             finally
             {
-                if (!lockAlreadyHeldOnEntry)
-                    rwlControl.ExitWriteLock();
+                // only releases the lock if it was acquired in this method
+                if (!lockAlreadyHeld)
+                    this.rwControl.Release();
             }
         }
 
-        public void UpdateSetting(string currentEnvironment, Setting value)
+        public async Task OverrideStateAsync(List<Setting> values)
         {
-            rwlControl.EnterWriteLock();
+            await this.OverrideStateAsyncImpl(values, false).ConfigureAwait(false);
+        }
+
+        public void OverrideState(List<Setting> values)
+        {
+            this.OverrideStateAsync(values).Wait();
+        }
+
+        public async Task UpdateSettingAsync(Setting value)
+        {
+            await rwControl.WaitAsync().ConfigureAwait(false);
             try
             {
-                Setting oldValue = null;
-                if (this.CurrentSettings.TryGetValue(value.Key, out oldValue))
-                    if (this.CurrentSettings.TryUpdate(value.Key, value, oldValue))
-                        this.OverrideState(currentEnvironment, this.CurrentSettings.Values.ToList());
+                if (CurrentSettings.ContainsKey(value.Key))
+                {
+                    CurrentSettings[value.Key] = value;
+                    await this.OverrideStateAsyncImpl(CurrentSettings.Values.ToList(), true).ConfigureAwait(false);
+                }
             }
             catch (Exception exp)
             {
@@ -116,28 +143,33 @@ namespace settings4net.Core
             }
             finally
             {
-                if (rwlControl.IsWriteLockHeld)
-                    rwlControl.ExitWriteLock();
+                rwControl.Release();
             }
         }
 
-        public void UpdateSettings(string currentEnvironment, List<Setting> values)
+        public void UpdateSetting(Setting value)
         {
-            rwlControl.EnterWriteLock();
+            this.UpdateSettingAsync(value).Wait();
+        }
+
+        public async Task UpdateSettingsAsync(List<Setting> values)
+        {
+            await this.rwControl.WaitAsync().ConfigureAwait(false);
             try
             {
                 bool anyUpdated = false;
                 foreach (Setting value in values)
                 {
-                    Setting oldValue = null;
-                    if (this.CurrentSettings.TryGetValue(value.Key, out oldValue))
-                        if (this.CurrentSettings.TryUpdate(value.Key, value, oldValue))
-                            anyUpdated = true;
+                    if (CurrentSettings.ContainsKey(value.Key))
+                    {
+                        CurrentSettings[value.Key] = value;
+                        anyUpdated = true;
+                    }
                 }
 
                 // only serializes to file if at least one setting was updated
                 if (anyUpdated)
-                    this.OverrideState(currentEnvironment, this.CurrentSettings.Values.ToList());
+                    await this.OverrideStateAsyncImpl(CurrentSettings.Values.ToList(), true).ConfigureAwait(false);
             }
             catch (Exception exp)
             {
@@ -145,14 +177,34 @@ namespace settings4net.Core
             }
             finally
             {
-                if (rwlControl.IsWriteLockHeld)
-                    rwlControl.ExitWriteLock();
+                this.rwControl.Release();
             }
         }
 
-        public void AddSetting(string currentEnvironment, Setting setting)
+        public void UpdateSettings(List<Setting> values)
+        {
+            this.UpdateSettingsAsync(values).Wait();
+        }
+
+        public void AddSetting(Setting setting)
         {
             throw new NotImplementedException();
         }
+
+        public Task AddSettingAsync(Setting setting)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void DeleteSetting(string fullpath)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task DeleteSettingAsync(string fullpath)
+        {
+            throw new NotImplementedException();
+        }
+
     }
 }
