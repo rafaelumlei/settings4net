@@ -46,6 +46,8 @@ namespace settings4net.Core.Interfaces
         /// <param name="values">List of setting's values</param>
         void UpdateSettings(string application, string currentEnvironment, List<Setting> values);
 
+        Task UpdateSettingsAsync(string application, string currentEnvironment, List<Setting> settings);
+
         /// <summary>
         /// Updates setting's value (if it doesn't exist it is not added)
         /// </summary>

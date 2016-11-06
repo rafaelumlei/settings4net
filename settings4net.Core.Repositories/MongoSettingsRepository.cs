@@ -10,7 +10,7 @@ using MongoDB.Driver;
 using settings4net.Core.RemoteRepositories.Models;
 using log4net;
 
-namespace settings4net.Core.Repositories
+namespace settings4net.Core.RemoteRepositories
 {
     public class MongoSettingsRepository : IMultiAppSettingsRepository
     {
@@ -51,7 +51,7 @@ namespace settings4net.Core.Repositories
         {
             try
             {
-                SettingMongo settingMongo = ModelToMongoMapper.Map(setting);
+                SettingMongo settingMongo = StoredSettingMapper.Map<SettingMongo>(setting);
                 settingMongo.Created = settingMongo.Updated = DateTimeOffset.UtcNow;
                 await this.SettingsCollection.InsertOneAsync(settingMongo).ConfigureAwait(false);
             }
@@ -73,7 +73,7 @@ namespace settings4net.Core.Repositories
             {
                 var filter = Builders<SettingMongo>.Filter.Where(s => s.Application == application && s.Environment == currentEnvironment);
                 var result = await this.SettingsCollection.FindAsync<SettingMongo>(filter).ConfigureAwait(false);
-                return ModelToMongoMapper.Map(await result.ToListAsync().ConfigureAwait(false)).ToList();
+                return StoredSettingMapper.Map(await result.ToListAsync().ConfigureAwait(false)).ToList();
             }
             catch (Exception exp)
             {
@@ -92,7 +92,7 @@ namespace settings4net.Core.Repositories
         {
             try
             {
-                SettingMongo settingMongo = ModelToMongoMapper.Map(value);
+                SettingMongo settingMongo = StoredSettingMapper.Map<SettingMongo>(value);
                 var filter = Builders<SettingMongo>.Filter.Eq(s => s.Key, value.Key);
                 var update = Builders<SettingMongo>.Update.Set(s => s.Documentation, settingMongo.Documentation)
                                                           .Set(s => s.JSONValue, settingMongo.JSONValue)
