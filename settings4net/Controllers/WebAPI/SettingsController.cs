@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using settings4net.Core.Interfaces;
 using settings4net.Core.Model;
+using settings4net.Core.RemoteRepositories;
 using settings4net.Core.Repositories;
 using System;
 using System.Collections.Generic;
@@ -24,7 +25,8 @@ namespace settings4net.API.Controllers.WebAPI
 
         public SettingsController()
         {
-            this.SettingsRepository = new MongoSettingsRepository("mongodb://localhost:27017/Settings4net");
+            // this.SettingsRepository = new MongoSettingsRepository("mongodb://localhost:27017/Settings4net");
+            // this.SettingsRepository = new EFSettingsRepository("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=settings4netDB;Integrated Security=True");
         }
 
         [HttpGet]

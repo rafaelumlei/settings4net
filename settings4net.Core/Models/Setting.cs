@@ -26,7 +26,7 @@ namespace settings4net.Core.Model
         }
 
         /// <summary>
-        /// Env + ":" + Key
+        /// App + ":" + Env + ":" + Key
         /// </summary>
         public string Key
         {
