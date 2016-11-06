@@ -23,10 +23,9 @@ namespace settings4net.API.Controllers.WebAPI
 
         private IMultiAppSettingsRepository SettingsRepository { get; set; }
 
-        public SettingsController()
+        public SettingsController(IMultiAppSettingsRepository settingsRepository)
         {
-            // this.SettingsRepository = new MongoSettingsRepository("mongodb://localhost:27017/Settings4net");
-            // this.SettingsRepository = new EFSettingsRepository("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=settings4netDB;Integrated Security=True");
+            this.SettingsRepository = settingsRepository;
         }
 
         [HttpGet]
@@ -49,7 +48,7 @@ namespace settings4net.API.Controllers.WebAPI
             catch (Exception exp)
             {
                 logger.Warn("Error while getting the settings", exp);
-                return Request.CreateResponse(HttpStatusCode.InternalServerError, "Unknown error occured while adding the setting");
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, "Unknown error occured while getting the settings");
             }
         }
 

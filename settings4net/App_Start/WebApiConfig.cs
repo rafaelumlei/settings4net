@@ -5,6 +5,9 @@ using System.Net.Http;
 using System.Web.Http;
 using Microsoft.Owin.Security.OAuth;
 using Newtonsoft.Json.Serialization;
+using System.Configuration;
+using Microsoft.Practices.Unity.Configuration;
+using Microsoft.Practices.Unity;
 
 namespace settings4net
 {
@@ -16,6 +19,10 @@ namespace settings4net
             // Configure Web API to use only bearer token authentication.
             config.SuppressDefaultHostAuthentication();
             config.Filters.Add(new HostAuthenticationFilter(OAuthDefaults.AuthenticationType));
+
+            // Adding container and loading configuration
+            IUnityContainer container = new UnityContainer().LoadConfiguration();
+            config.DependencyResolver = new UnityResolver(container);
 
             //log4net.Config.XmlConfigurator.Configure();
 

@@ -22,14 +22,14 @@ namespace settings4net.Core.RemoteRepositories
 
         private IMongoClient MongoClient { get; set; }
 
-        public MongoSettingsRepository(string connnectionString)
+        public MongoSettingsRepository(string connectionString)
         {
-            if (string.IsNullOrEmpty(connnectionString))
+            if (string.IsNullOrEmpty(connectionString))
                 throw new ArgumentException("Invalid mongo connection string");
 
             try
             {
-                var mongoUrl = MongoUrl.Create(connnectionString);
+                var mongoUrl = MongoUrl.Create(connectionString);
                 this.MongoClient = new MongoClient(mongoUrl);
                 this.Database = this.MongoClient.GetDatabase(mongoUrl.DatabaseName);
                 this.SettingsCollection = this.Database.GetCollection<SettingMongo>("Settings");
