@@ -53,10 +53,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\settings4net.Core.Repositories\settings4net.Core.RemoteRepositories.csproj">
-      <Project>{fe64321b-6de3-4d54-9d81-74e63be535db}</Project>
-      <Name>settings4net.Core.RemoteRepositories</Name>
-    </ProjectReference>
     <ProjectReference Include="..\settings4net.Core\settings4net.Core.csproj">
       <Project>{3A18359F-D56C-4218-B187-57919FC30850}</Project>
       <Name>settings4net.Core</Name>
