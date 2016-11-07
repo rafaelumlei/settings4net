@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
-using System.Text;
-using System.Web.Http;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using settings4net;
-using settings4net.Controllers;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace settings4net.Tests.Controllers
 {
