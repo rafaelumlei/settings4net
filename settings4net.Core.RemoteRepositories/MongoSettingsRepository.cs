@@ -57,7 +57,7 @@ namespace settings4net.Core.RemoteRepositories
             }
             catch (Exception exp)
             {
-                logger.Warn(string.Format("Error adding setting {0} to mongo", setting.Key), exp);
+                logger.Warn(string.Format("Error adding setting {0} to mongo", Newtonsoft.Json.JsonConvert.SerializeObject(setting)), exp);
                 throw;
             }
         }
@@ -102,7 +102,7 @@ namespace settings4net.Core.RemoteRepositories
             }
             catch (Exception exp)
             {
-                logger.Warn(string.Format("Error while updating setting {0} into mongo", value.Key), exp);
+                logger.Warn(string.Format("Error while updating setting {0} into mongo", Newtonsoft.Json.JsonConvert.SerializeObject(value)), exp);
                 throw;
             }
         }
@@ -126,7 +126,7 @@ namespace settings4net.Core.RemoteRepositories
 
             await Task.WhenAll(tasks).ConfigureAwait(false);
         }
-        
+
         public void UpdateSettings(string application, string currentEnvironment, List<Setting> settings)
         {
             this.UpdateSettingsAsync(application, currentEnvironment, settings).RunSynchronously();

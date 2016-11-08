@@ -31,12 +31,20 @@ namespace settings4net.Core.RemoteRepositories
 
         public async Task AddSettingAsync(string application, string currentEnvironment, Setting setting)
         {
-            using (var context = new SettingsContext(this.ConnectionString))
+            try
             {
-                SettingEF settingToAdd = StoredSettingMapper.Map<SettingEF>(setting);
-                settingToAdd.Created = settingToAdd.Updated = DateTimeOffset.UtcNow;
-                context.Settings.Add(settingToAdd);
-                await context.SaveChangesAsync().ConfigureAwait(false);
+                using (var context = new SettingsContext(this.ConnectionString))
+                {
+                    SettingEF settingToAdd = StoredSettingMapper.Map<SettingEF>(setting);
+                    settingToAdd.Created = settingToAdd.Updated = DateTimeOffset.UtcNow;
+                    context.Settings.Add(settingToAdd);
+                    await context.SaveChangesAsync().ConfigureAwait(false);
+                }
+            }
+            catch (Exception exp)
+            {
+                logger.Warn(string.Format("Error adding setting {0} to EF", Newtonsoft.Json.JsonConvert.SerializeObject(setting)), exp);
+                throw;
             }
         }
 
@@ -47,19 +55,27 @@ namespace settings4net.Core.RemoteRepositories
 
         public async Task DeleteSettingAsync(string application, string currentEnvironment, string fullpath)
         {
-            using (var context = new SettingsContext(this.ConnectionString))
+            try
             {
-                SettingEF settingToDelete = await context.Settings.Where(s => s.Application == application && s.Environment == currentEnvironment && s.Fullpath == fullpath)
-                                                                  .FirstOrDefaultAsync()
-                                                                  .ConfigureAwait(false);
-
-                if (settingToDelete != null)
+                using (var context = new SettingsContext(this.ConnectionString))
                 {
-                    context.Settings.Remove(settingToDelete);
-                    await context.SaveChangesAsync().ConfigureAwait(false);
+                    SettingEF settingToDelete = await context.Settings.Where(s => s.Application == application && s.Environment == currentEnvironment && s.Fullpath == fullpath)
+                                                                      .FirstOrDefaultAsync()
+                                                                      .ConfigureAwait(false);
+
+                    if (settingToDelete != null)
+                    {
+                        context.Settings.Remove(settingToDelete);
+                        await context.SaveChangesAsync().ConfigureAwait(false);
+                    }
                 }
             }
-        }
+            catch (Exception exp)
+            {
+                logger.Warn(string.Format("Error while deleting setting {0}:{1}:{2} from EF", application, currentEnvironment, fullpath), exp);
+                throw;
+            }
+}
 
         public List<Setting> GetSettings(string application, string currentEnvironment)
         {
@@ -68,12 +84,20 @@ namespace settings4net.Core.RemoteRepositories
 
         public async Task<List<Setting>> GetSettingsAsync(string application, string currentEnvironment)
         {
-            using (var context = new SettingsContext(this.ConnectionString))
+            try
             {
-                List<SettingEF> results = await context.Settings.Where(s => s.Application == application && s.Environment == currentEnvironment)
-                                                                .ToListAsync()
-                                                                .ConfigureAwait(false);
-                return StoredSettingMapper.Map(results).ToList();
+                using (var context = new SettingsContext(this.ConnectionString))
+                {
+                    List<SettingEF> results = await context.Settings.Where(s => s.Application == application && s.Environment == currentEnvironment)
+                                                                    .ToListAsync()
+                                                                    .ConfigureAwait(false);
+                    return StoredSettingMapper.Map(results).ToList();
+                }
+            }
+            catch (Exception exp)
+            {
+                logger.Warn(string.Format("Error getting settings from EF for the app {0} and env {1}", application, currentEnvironment), exp);
+                throw;
             }
         }
 
@@ -84,18 +108,26 @@ namespace settings4net.Core.RemoteRepositories
 
         public async Task UpdateSettingAsync(string application, string currentEnvironment, Setting value)
         {
-            using (var context = new SettingsContext(this.ConnectionString))
+            try
             {
-                SettingEF settingMapped = StoredSettingMapper.Map<SettingEF>(value);
-                SettingEF settingEF = await context.Settings.Where(s => s.Key == settingMapped.Key).FirstOrDefaultAsync().ConfigureAwait(false);
-
-                if (settingEF != null)
+                using (var context = new SettingsContext(this.ConnectionString))
                 {
-                    settingEF.JSONValue = settingMapped.JSONValue;
-                    settingEF.Documentation = settingMapped.Documentation;
-                    settingEF.Updated = DateTimeOffset.UtcNow;
-                    await context.SaveChangesAsync().ConfigureAwait(false);
+                    SettingEF settingMapped = StoredSettingMapper.Map<SettingEF>(value);
+                    SettingEF settingEF = await context.Settings.Where(s => s.Key == settingMapped.Key).FirstOrDefaultAsync().ConfigureAwait(false);
+
+                    if (settingEF != null)
+                    {
+                        settingEF.JSONValue = settingMapped.JSONValue;
+                        settingEF.Documentation = settingMapped.Documentation;
+                        settingEF.Updated = DateTimeOffset.UtcNow;
+                        await context.SaveChangesAsync().ConfigureAwait(false);
+                    }
                 }
+            }
+            catch (Exception exp)
+            {
+                logger.Warn(string.Format("Error while updating setting {0} in EF", Newtonsoft.Json.JsonConvert.SerializeObject(value)), exp);
+                throw;
             }
         }
 
