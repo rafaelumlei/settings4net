@@ -101,6 +101,29 @@ namespace settings4net.Core.RemoteRepositories
             }
         }
 
+        public List<Setting> GetSettings()
+        {
+            return this.GetSettingsAsync().Result;
+        }
+
+        public async Task<List<Setting>> GetSettingsAsync()
+        {
+            try
+            {
+                using (var context = new SettingsContext(this.ConnectionString))
+                {
+                    List<SettingEF> results = await context.Settings.ToListAsync()
+                                                                    .ConfigureAwait(false);
+                    return StoredSettingMapper.Map(results).ToList();
+                }
+            }
+            catch (Exception exp)
+            {
+                logger.Warn("Error getting all the settings from EF", exp);
+                throw;
+            }
+        }
+
         public void UpdateSetting(string application, string currentEnvironment, Setting value)
         {
             this.UpdateSettingAsync(application, currentEnvironment, value).Wait();
@@ -149,6 +172,57 @@ namespace settings4net.Core.RemoteRepositories
             }
 
             await Task.WhenAll(tasks).ConfigureAwait(false);
+        }
+
+        public List<string> GetApps()
+        {
+            return this.GetAppsAsync().Result;
+        }
+
+        public async Task<List<string>> GetAppsAsync()
+        {
+            try
+            {
+                using (var context = new SettingsContext(this.ConnectionString))
+                {
+                    List<string> results = await context.Settings.Select(s => s.Application)
+                                                                 .Distinct()
+                                                                 .ToListAsync()
+                                                                 .ConfigureAwait(false);
+                    return results;
+                }
+            }
+            catch (Exception exp)
+            {
+                logger.Warn("Error getting available apps from EF", exp);
+                throw;
+            }
+        }
+
+        public List<string> GetAppEnvironments(string app)
+        {
+            return this.GetAppEnvironmentsAsync(app).Result;
+        }
+
+        public async Task<List<string>> GetAppEnvironmentsAsync(string app)
+        {
+            try
+            {
+                using (var context = new SettingsContext(this.ConnectionString))
+                {
+                    List<string> results = await context.Settings.Where(s => s.Application == app)
+                                                                 .Select(s => s.Environment)
+                                                                 .Distinct()
+                                                                 .ToListAsync()
+                                                                 .ConfigureAwait(false);
+                    return results;
+                }
+            }
+            catch (Exception exp)
+            {
+                logger.Warn(string.Format("Error getting environments available for the app {0} from EF", app), exp);
+                throw;
+            }
         }
     }
 }

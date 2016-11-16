@@ -23,27 +23,35 @@ namespace settings4net.Core.Interfaces
         /// </summary>
         /// <param name="application">The application owner of the settings</param>
         /// <param name="currentEnvironment">The environment in use (DEV, QA, ...)</param>
-        /// <param name="values">List of setting's values</param>
+        /// <param name="setting">The setting to add</param>
         void AddSetting(string application, string currentEnvironment, Setting setting);
 
         Task AddSettingAsync(string application, string currentEnvironment, Setting setting);
 
         /// <summary>
-        /// Gets all the settings available in the repository
+        /// Gets all the settings available in the repository for the app and env specified 
         /// </summary>
         /// <param name="application">The application owner of the settings</param>
         /// <param name="currentEnvironment">The environment in use (DEV, QA, ...)</param>
-        /// <param name="values">List of setting's values</param>
+        /// <returns>The settings for the specified application/env</returns>
         List<Setting> GetSettings(string application, string currentEnvironment);
 
         Task<List<Setting>> GetSettingsAsync(string application, string currentEnvironment);
+
+        /// <summary>
+        /// Gets all the settings available in the repository
+        /// </summary>
+        /// <returns>The settings for the specified application/env</returns>
+        List<Setting> GetSettings();
+
+        Task<List<Setting>> GetSettingsAsync();
 
         /// <summary>
         /// Updates settings' values (if they don't exist they are not added)
         /// </summary>
         /// <param name="application">The application owner of the settings</param>
         /// <param name="currentEnvironment">The environment in use (DEV, QA, ...)</param>
-        /// <param name="values">List of setting's values</param>
+        /// <param name="values">List of setting's values to update</param>
         void UpdateSettings(string application, string currentEnvironment, List<Setting> values);
 
         Task UpdateSettingsAsync(string application, string currentEnvironment, List<Setting> settings);
@@ -53,7 +61,7 @@ namespace settings4net.Core.Interfaces
         /// </summary>
         /// <param name="application">The application owner of the settings</param>
         /// <param name="currentEnvironment">The environment in use (DEV, QA, ...)</param>
-        /// <param name="values">List of setting's values</param>
+        /// <param name="value">List of setting's values</param>
         void UpdateSetting(string application, string currentEnvironment, Setting value);
 
         Task UpdateSettingAsync(string application, string currentEnvironment, Setting value);
@@ -67,6 +75,22 @@ namespace settings4net.Core.Interfaces
         void DeleteSetting(string application, string currentEnvironment, string fullpath);
 
         Task DeleteSettingAsync(string application, string currentEnvironment, string fullpath);
+
+        /// <summary>
+        /// Gets all available apps for which there are settings in the repository
+        /// </summary>
+        /// <returns>List of all available apps</returns>
+        List<string> GetApps();
+
+        Task<List<string>> GetAppsAsync();
+
+        /// <summary>
+        /// Gets all available environments for a specific app
+        /// </summary>
+        /// <returns>List of all available environments for the specified app</returns>
+        List<string> GetAppEnvironments(string app);
+
+        Task<List<string>> GetAppEnvironmentsAsync(string app);
 
     }
 }

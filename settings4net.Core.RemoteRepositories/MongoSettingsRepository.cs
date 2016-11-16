@@ -84,8 +84,27 @@ namespace settings4net.Core.RemoteRepositories
 
         public List<Setting> GetSettings(string application, string currentEnvironment)
         {
-            var result = this.GetSettingsAsync(application, currentEnvironment);
-            return result.Result;
+            return this.GetSettingsAsync(application, currentEnvironment).Result;
+        }
+
+        public async Task<List<Setting>> GetSettingsAsync()
+        {
+            try
+            {
+                var filter = Builders<SettingMongo>.Filter.Empty;
+                var result = await this.SettingsCollection.FindAsync(filter).ConfigureAwait(false);
+                return StoredSettingMapper.Map(await result.ToListAsync().ConfigureAwait(false)).ToList();
+            }
+            catch (Exception exp)
+            {
+                logger.Warn("Error getting all the settings", exp);
+                throw;
+            }
+        }
+
+        public List<Setting> GetSettings()
+        {
+            return this.GetSettingsAsync().Result;
         }
 
         public async Task UpdateSettingAsync(string application, string currentEnvironment, Setting value)
@@ -151,5 +170,55 @@ namespace settings4net.Core.RemoteRepositories
             this.DeleteSettingAsync(application, currentEnvironment, fullpath).RunSynchronously();
         }
 
+        public List<string> GetApps()
+        {
+            return this.GetAppsAsync().Result;
+        }
+
+        public async Task<List<string>> GetAppsAsync()
+        {
+            try
+            {
+                var filter = Builders<SettingMongo>.Filter.Empty;
+                // just getting the name of the property, it is refactor safe
+                Func<SettingMongo, string> fieldDefinition = (s) =>
+                {
+                    return nameof(s.Application);
+                };
+                FieldDefinition<SettingMongo, string> fieldToDistinct = fieldDefinition(null);
+                var result = await this.SettingsCollection.DistinctAsync<string>(fieldToDistinct, filter).ConfigureAwait(false);
+                return await result.ToListAsync().ConfigureAwait(false);
+            }
+            catch (Exception exp)
+            {
+                logger.Warn("Error getting available apps from mongo", exp);
+                throw;
+            }
+        }
+
+        public List<string> GetAppEnvironments(string app)
+        {
+            return this.GetAppEnvironmentsAsync(app).Result;
+        }
+
+        public async Task<List<string>> GetAppEnvironmentsAsync(string app)
+        {
+            try
+            {
+                var filter = Builders<SettingMongo>.Filter.Where(s => s.Application == app);
+                Func<SettingMongo, string> fieldDefinition = (s) =>
+                {
+                    return nameof(s.Environment);
+                };
+                FieldDefinition<SettingMongo, string> fieldToDistinct = fieldDefinition(null);
+                var result = await this.SettingsCollection.DistinctAsync<string>(fieldToDistinct, filter).ConfigureAwait(false);
+                return await result.ToListAsync().ConfigureAwait(false);
+            }
+            catch (Exception exp)
+            {
+                logger.Warn(string.Format("Error getting the available environments for the app {0} from mongo", app), exp);
+                throw;
+            }
+        }
     }
 }

@@ -17,7 +17,12 @@ namespace Settings4Net.Console
 
         static void Main(string[] args)
         {
-            System.Console.WriteLine(XPTOSettings.ServiceUrl);
+            Func<string, string> fieldDefinition = (s) =>
+            {
+                return nameof(s.Length);
+            };
+
+            System.Console.WriteLine(fieldDefinition(null));
             System.Console.ReadLine();
 
         }

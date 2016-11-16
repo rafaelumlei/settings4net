@@ -8,6 +8,7 @@ using Newtonsoft.Json.Serialization;
 using System.Configuration;
 using Microsoft.Practices.Unity.Configuration;
 using Microsoft.Practices.Unity;
+using settings4net.API.CORS;
 
 namespace settings4net
 {
@@ -19,6 +20,10 @@ namespace settings4net
             // Configure Web API to use only bearer token authentication.
             config.SuppressDefaultHostAuthentication();
             config.Filters.Add(new HostAuthenticationFilter(OAuthDefaults.AuthenticationType));
+
+            // Configuring CORS
+            config.SetCorsPolicyProviderFactory(new CorsPolicyFactory());
+            config.EnableCors();
 
             // Adding container and loading configuration
             IUnityContainer container = new UnityContainer().LoadConfiguration();
