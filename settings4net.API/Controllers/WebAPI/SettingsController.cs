@@ -29,8 +29,83 @@ namespace settings4net.API.Controllers.WebAPI
         }
 
         [HttpGet]
+        [Route("settings")]
+        public async Task<HttpResponseMessage> GetSettings(bool fullVersion = true)
+        {
+            logger.Debug("GET settings");
+
+            try
+            {
+                // TODO: optimize in the future. The unnecessary data should not be retrieved
+                List<Setting> settings = await this.SettingsRepository.GetSettingsAsync();
+                if (fullVersion)
+                    return Request.CreateResponse(settings);
+                else
+                    return Request.CreateResponse(settings.Select(s => new { s.Id, s.Application, s.Created, s.Updated, s.Environment, s.Fullpath }));
+
+            }
+            catch (Exception exp)
+            {
+                logger.Warn("Error while getting all the settings", exp);
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, "Unknown error occured while getting the settings");
+            }
+        }
+
+        [HttpGet]
+        [Route("settings/{id}")]
+        public async Task<HttpResponseMessage> GetSetting(string id)
+        {
+            logger.Debug(string.Format("GET settings/{0}", id));
+
+            if (string.IsNullOrEmpty(id))
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Invalid identifier");
+
+            try
+            { 
+                Setting setting = await this.SettingsRepository.GetSettingAsync(id);
+                if (setting != null)
+                    return Request.CreateResponse(setting);
+                else
+                    return Request.CreateErrorResponse(HttpStatusCode.NotFound, "Setting not found");
+
+            }
+            catch (Exception exp)
+            {
+                logger.Warn(string.Format("Error while getting the setting with the id {0}", id), exp);
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, "Unknown error occured while getting the settings");
+            }
+        }
+
+        [HttpGet]
+        [Route("applications/{app}/settings")]
+        public async Task<HttpResponseMessage> GetApplicationSettings(string app, bool fullVersion = true)
+        {
+            logger.Debug(string.Format("GET applications/{0}/settings", app ?? "null"));
+
+            if (string.IsNullOrEmpty(app))
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Application not specified");
+            
+
+            try
+            {
+                // TODO: optimize in the future. The unnecessary data should not be retrieved
+                List<Setting> settings = await this.SettingsRepository.GetSettingsAsync(app);
+                if (fullVersion)
+                    return Request.CreateResponse(settings);
+                else
+                    return Request.CreateResponse(settings.Select(s => new { s.Id, s.Application, s.Created, s.Updated, s.Environment, s.Fullpath }));
+
+            }
+            catch (Exception exp)
+            {
+                logger.Warn(string.Format("Error while getting the settings for the app {0}", app), exp);
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, "Unknown error occured while getting the settings");
+            }
+        }
+
+        [HttpGet]
         [Route("applications/{app}/environments/{env}/settings")]
-        public async Task<HttpResponseMessage> GetApplicationSettings(string app, string env, bool fullVersion = true)
+        public async Task<HttpResponseMessage> GetApplicationEnvironmentSettings(string app, string env, bool fullVersion = true)
         {
             logger.Debug(string.Format("GET applications/{0}/environments/{1}/settings", app ?? "null", env ?? "null"));
 
@@ -47,35 +122,12 @@ namespace settings4net.API.Controllers.WebAPI
                 if (fullVersion)
                     return Request.CreateResponse(settings);
                 else
-                    return Request.CreateResponse(settings.Select(s => new { s.Application, s.Created, s.Updated, s.Environment, s.Fullpath }));
+                    return Request.CreateResponse(settings.Select(s => new { s.Id, s.Application, s.Created, s.Updated, s.Environment, s.Fullpath }));
 
             }
             catch (Exception exp)
             {
                 logger.Warn(string.Format("Error while getting the settings for the app {0} and env {1}", app, env), exp);
-                return Request.CreateResponse(HttpStatusCode.InternalServerError, "Unknown error occured while getting the settings");
-            }
-        }
-
-        [HttpGet]
-        [Route("settings")]
-        public async Task<HttpResponseMessage> GetSettings(bool fullVersion = true)
-        {
-            logger.Debug("GET settings");
-            
-            try
-            {
-                // TODO: optimize in the future. The unnecessary data should not be retrieved
-                List<Setting> settings = await this.SettingsRepository.GetSettingsAsync();
-                if (fullVersion)
-                    return Request.CreateResponse(settings);
-                else
-                    return Request.CreateResponse(settings.Select(s => new { s.Application, s.Created, s.Updated, s.Environment, s.Fullpath }));
-
-            }
-            catch (Exception exp)
-            {
-                logger.Warn("Error while getting all the settings", exp);
                 return Request.CreateResponse(HttpStatusCode.InternalServerError, "Unknown error occured while getting the settings");
             }
         }

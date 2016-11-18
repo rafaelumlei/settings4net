@@ -17,12 +17,8 @@ namespace Settings4Net.Console
 
         static void Main(string[] args)
         {
-            Func<string, string> fieldDefinition = (s) =>
-            {
-                return nameof(s.Length);
-            };
 
-            System.Console.WriteLine(fieldDefinition(null));
+            System.Console.WriteLine("");
             System.Console.ReadLine();
 
         }

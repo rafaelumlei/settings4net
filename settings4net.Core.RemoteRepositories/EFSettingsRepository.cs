@@ -10,6 +10,7 @@ using System.Data.Entity;
 using settings4net.Core.RemoteRepositories.Models;
 using settings4net.Core.RemoteRepositories.Mappers;
 using log4net;
+using System.Linq.Expressions;
 
 namespace settings4net.Core.RemoteRepositories
 {
@@ -77,18 +78,28 @@ namespace settings4net.Core.RemoteRepositories
             }
 }
 
-        public List<Setting> GetSettings(string application, string currentEnvironment)
+        public List<Setting> GetSettings(string application = null, string currentEnvironment = null)
         {
             return this.GetSettingsAsync(application, currentEnvironment).Result;
         }
 
-        public async Task<List<Setting>> GetSettingsAsync(string application, string currentEnvironment)
+        public async Task<List<Setting>> GetSettingsAsync(string application = null, string currentEnvironment = null)
         {
             try
             {
+                Expression<Func<SettingEF, bool>> filter = s => true;
+
+                if (!string.IsNullOrEmpty(application))
+                {
+                    if (string.IsNullOrEmpty(currentEnvironment))
+                        filter = s => s.Application == application;
+                    else 
+                        filter = s => s.Application == application && s.Environment == currentEnvironment;
+                }
+
                 using (var context = new SettingsContext(this.ConnectionString))
                 {
-                    List<SettingEF> results = await context.Settings.Where(s => s.Application == application && s.Environment == currentEnvironment)
+                    List<SettingEF> results = await context.Settings.Where(filter)
                                                                     .ToListAsync()
                                                                     .ConfigureAwait(false);
                     return StoredSettingMapper.Map(results).ToList();
@@ -97,29 +108,6 @@ namespace settings4net.Core.RemoteRepositories
             catch (Exception exp)
             {
                 logger.Warn(string.Format("Error getting settings from EF for the app {0} and env {1}", application, currentEnvironment), exp);
-                throw;
-            }
-        }
-
-        public List<Setting> GetSettings()
-        {
-            return this.GetSettingsAsync().Result;
-        }
-
-        public async Task<List<Setting>> GetSettingsAsync()
-        {
-            try
-            {
-                using (var context = new SettingsContext(this.ConnectionString))
-                {
-                    List<SettingEF> results = await context.Settings.ToListAsync()
-                                                                    .ConfigureAwait(false);
-                    return StoredSettingMapper.Map(results).ToList();
-                }
-            }
-            catch (Exception exp)
-            {
-                logger.Warn("Error getting all the settings from EF", exp);
                 throw;
             }
         }
@@ -136,7 +124,7 @@ namespace settings4net.Core.RemoteRepositories
                 using (var context = new SettingsContext(this.ConnectionString))
                 {
                     SettingEF settingMapped = StoredSettingMapper.Map<SettingEF>(value);
-                    SettingEF settingEF = await context.Settings.Where(s => s.Key == settingMapped.Key).FirstOrDefaultAsync().ConfigureAwait(false);
+                    SettingEF settingEF = await context.Settings.Where(s => s.Id == settingMapped.Id).FirstOrDefaultAsync().ConfigureAwait(false);
 
                     if (settingEF != null)
                     {
@@ -221,6 +209,35 @@ namespace settings4net.Core.RemoteRepositories
             catch (Exception exp)
             {
                 logger.Warn(string.Format("Error getting environments available for the app {0} from EF", app), exp);
+                throw;
+            }
+        }
+
+        public Setting GetSetting(string id = null)
+        {
+            return this.GetSettingAsync(id).Result;
+        }
+
+        public async Task<Setting> GetSettingAsync(string id)
+        {
+            try
+            {
+                using (var context = new SettingsContext(this.ConnectionString))
+                {
+                    long lId;
+                    if (long.TryParse(id, out lId))
+                    { 
+                        SettingEF result = await context.Settings.FirstOrDefaultAsync(s => s.DbId == lId)
+                                                                 .ConfigureAwait(false);
+                        return StoredSettingMapper.Map(result);
+                    }
+
+                    return null;
+                }
+            }
+            catch (Exception exp)
+            {
+                logger.Warn(string.Format("Error getting setting with id {0} from mongo", id), exp);
                 throw;
             }
         }

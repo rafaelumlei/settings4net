@@ -29,22 +29,22 @@ namespace settings4net.Core.Interfaces
         Task AddSettingAsync(string application, string currentEnvironment, Setting setting);
 
         /// <summary>
+        /// Gets a setting by id
+        /// </summary>
+        /// <param name="id">The setting identifier</param>
+        Setting GetSetting(string id = null);
+
+        Task<Setting> GetSettingAsync(string id);
+
+        /// <summary>
         /// Gets all the settings available in the repository for the app and env specified 
         /// </summary>
         /// <param name="application">The application owner of the settings</param>
         /// <param name="currentEnvironment">The environment in use (DEV, QA, ...)</param>
         /// <returns>The settings for the specified application/env</returns>
-        List<Setting> GetSettings(string application, string currentEnvironment);
+        List<Setting> GetSettings(string application = null, string currentEnvironment = null);
 
-        Task<List<Setting>> GetSettingsAsync(string application, string currentEnvironment);
-
-        /// <summary>
-        /// Gets all the settings available in the repository
-        /// </summary>
-        /// <returns>The settings for the specified application/env</returns>
-        List<Setting> GetSettings();
-
-        Task<List<Setting>> GetSettingsAsync();
+        Task<List<Setting>> GetSettingsAsync(string application = null, string currentEnvironment = null);
 
         /// <summary>
         /// Updates settings' values (if they don't exist they are not added)

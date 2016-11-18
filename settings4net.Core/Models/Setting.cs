@@ -26,6 +26,11 @@ namespace settings4net.Core.Model
         }
 
         /// <summary>
+        /// Gets or sets the setting identifier
+        /// </summary>
+        public string Id { get; set; }
+
+        /// <summary>
         /// App + ":" + Env + ":" + Key
         /// </summary>
         public string Key
