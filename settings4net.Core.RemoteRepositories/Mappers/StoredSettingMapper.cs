@@ -15,33 +15,44 @@ namespace settings4net.Core.RemoteRepositories.Mappers
 
         public static T Map<T>(Model.Setting setting) where T : IStoredSetting, new()
         {
-            T mappedSetting = new T();
-
-            IStoredSetting iMappedSetting = mappedSetting as IStoredSetting;
-            iMappedSetting.Key = setting.Key;
-            iMappedSetting.Application = setting.Application;
-            iMappedSetting.Documentation = setting.Documentation;
-            iMappedSetting.Environment = setting.Environment;
-            iMappedSetting.Fullpath = setting.Fullpath;
-            iMappedSetting.JSONValue = setting.JSONValue.ToString();
-            iMappedSetting.Updated = setting.Updated;
-            iMappedSetting.Created = setting.Created;
-
-            return mappedSetting;
+            if (setting != null)
+            {
+                T mappedSetting = new T();
+                IStoredSetting iMappedSetting = mappedSetting as IStoredSetting;
+                iMappedSetting.Id = setting.Id;
+                iMappedSetting.Application = setting.Application;
+                iMappedSetting.Documentation = setting.Documentation;
+                iMappedSetting.Environment = setting.Environment;
+                iMappedSetting.Fullpath = setting.Fullpath;
+                iMappedSetting.JSONValue = setting.JSONValue.ToString();
+                iMappedSetting.Updated = setting.Updated;
+                iMappedSetting.Created = setting.Created;
+                return mappedSetting;
+            }
+            else
+                return default(T);
         }
 
         public static Model.Setting Map(IStoredSetting setting)
         {
-            return new Model.Setting()  
+            if (setting != null)
             {
-                Application = setting.Application,
-                Documentation = setting.Documentation,
-                Environment = setting.Environment,
-                Fullpath = setting.Fullpath,
-                JSONValue = JToken.Parse(setting.JSONValue),
-                Updated = setting.Updated,
-                Created = setting.Created
-            };
+                return new Model.Setting()
+                {
+                    Id = setting.Id,
+                    Application = setting.Application,
+                    Documentation = setting.Documentation,
+                    Environment = setting.Environment,
+                    Fullpath = setting.Fullpath,
+                    JSONValue = JToken.Parse(setting.JSONValue),
+                    Updated = setting.Updated,
+                    Created = setting.Created
+                };
+            }
+            else
+            {
+                return null;
+            }
         }
 
         public static IEnumerable<T> Map<T>(IEnumerable<Model.Setting> settings) where T : IStoredSetting, new()

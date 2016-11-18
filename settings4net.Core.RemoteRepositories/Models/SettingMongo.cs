@@ -15,13 +15,25 @@ namespace settings4net.Core.RemoteRepositories.Models
         {
         }
 
-        public ObjectId Id { get; set;}
-
         /// <summary>
-        /// Gets or sets the setting key (eg: app + ":" + env + ":" + fullpath.
-        /// It will be saved as is to mongo for search purposes.
+        /// Gets or sets the setting identifier
         /// </summary>
-        public string Key { get; set; }
+        [BsonIgnore]
+        public string Id
+        {
+            get
+            {
+                return this.DbId.ToString();
+            }
+
+            set
+            {
+                this.DbId = value != null ? new ObjectId(value) : new ObjectId();
+            }
+        }
+
+        [BsonId]
+        public ObjectId DbId { get; set; }
 
         /// <summary>
         /// Gets or sets the name of the application/host that owns this setting

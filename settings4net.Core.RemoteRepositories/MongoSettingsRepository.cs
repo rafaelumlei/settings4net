@@ -9,6 +9,8 @@ using settings4net.Core.RemoteRepositories.Mappers;
 using MongoDB.Driver;
 using settings4net.Core.RemoteRepositories.Models;
 using log4net;
+using System.Linq.Expressions;
+using MongoDB.Bson;
 
 namespace settings4net.Core.RemoteRepositories
 {
@@ -33,8 +35,6 @@ namespace settings4net.Core.RemoteRepositories
                 this.MongoClient = new MongoClient(mongoUrl);
                 this.Database = this.MongoClient.GetDatabase(mongoUrl.DatabaseName);
                 this.SettingsCollection = this.Database.GetCollection<SettingMongo>("Settings");
-                // the key has to be unique
-                this.SettingsCollection.Indexes.CreateOne(Builders<SettingMongo>.IndexKeys.Ascending(s => s.Key), new CreateIndexOptions() { Unique = true });
                 // filters by application and common will be very common, specially in the API and Web Management tool
                 this.SettingsCollection.Indexes.CreateOne(Builders<SettingMongo>.IndexKeys.Ascending(s => s.Application).Ascending(s => s.Environment));
                 // filters by Fullpath will be very common, specially with wild cards in the Web Management tool
@@ -67,11 +67,21 @@ namespace settings4net.Core.RemoteRepositories
             this.AddSettingAsync(application, currentEnvironment, setting).RunSynchronously();
         }
 
-        public async Task<List<Setting>> GetSettingsAsync(string application, string currentEnvironment)
+        public async Task<List<Setting>> GetSettingsAsync(string application = null, string currentEnvironment = null)
         {
             try
             {
-                var filter = Builders<SettingMongo>.Filter.Where(s => s.Application == application && s.Environment == currentEnvironment);
+                Expression<Func<SettingMongo, bool>> filterExpression = s => true;
+
+                if (!string.IsNullOrEmpty(application))
+                {
+                    if (string.IsNullOrEmpty(currentEnvironment))
+                        filterExpression = s => s.Application == application;
+                    else
+                        filterExpression = s => s.Application == application && s.Environment == currentEnvironment;
+                }
+
+                var filter = Builders<SettingMongo>.Filter.Where(filterExpression);
                 var result = await this.SettingsCollection.FindAsync<SettingMongo>(filter).ConfigureAwait(false);
                 return StoredSettingMapper.Map(await result.ToListAsync().ConfigureAwait(false)).ToList();
             }
@@ -82,29 +92,9 @@ namespace settings4net.Core.RemoteRepositories
             }
         }
 
-        public List<Setting> GetSettings(string application, string currentEnvironment)
+        public List<Setting> GetSettings(string application = null, string currentEnvironment = null)
         {
             return this.GetSettingsAsync(application, currentEnvironment).Result;
-        }
-
-        public async Task<List<Setting>> GetSettingsAsync()
-        {
-            try
-            {
-                var filter = Builders<SettingMongo>.Filter.Empty;
-                var result = await this.SettingsCollection.FindAsync(filter).ConfigureAwait(false);
-                return StoredSettingMapper.Map(await result.ToListAsync().ConfigureAwait(false)).ToList();
-            }
-            catch (Exception exp)
-            {
-                logger.Warn("Error getting all the settings", exp);
-                throw;
-            }
-        }
-
-        public List<Setting> GetSettings()
-        {
-            return this.GetSettingsAsync().Result;
         }
 
         public async Task UpdateSettingAsync(string application, string currentEnvironment, Setting value)
@@ -112,7 +102,7 @@ namespace settings4net.Core.RemoteRepositories
             try
             {
                 SettingMongo settingMongo = StoredSettingMapper.Map<SettingMongo>(value);
-                var filter = Builders<SettingMongo>.Filter.Eq(s => s.Key, value.Key);
+                var filter = Builders<SettingMongo>.Filter.Eq(s => s.DbId, new ObjectId(value.Id));
                 var update = Builders<SettingMongo>.Update.Set(s => s.Documentation, settingMongo.Documentation)
                                                           .Set(s => s.JSONValue, settingMongo.JSONValue)
                                                           .Set(s => s.Updated, DateTimeOffset.UtcNow);
@@ -180,12 +170,7 @@ namespace settings4net.Core.RemoteRepositories
             try
             {
                 var filter = Builders<SettingMongo>.Filter.Empty;
-                // just getting the name of the property, it is refactor safe
-                Func<SettingMongo, string> fieldDefinition = (s) =>
-                {
-                    return nameof(s.Application);
-                };
-                FieldDefinition<SettingMongo, string> fieldToDistinct = fieldDefinition(null);
+                FieldDefinition<SettingMongo, string> fieldToDistinct = nameof(SettingMongo.Application);
                 var result = await this.SettingsCollection.DistinctAsync<string>(fieldToDistinct, filter).ConfigureAwait(false);
                 return await result.ToListAsync().ConfigureAwait(false);
             }
@@ -206,17 +191,35 @@ namespace settings4net.Core.RemoteRepositories
             try
             {
                 var filter = Builders<SettingMongo>.Filter.Where(s => s.Application == app);
-                Func<SettingMongo, string> fieldDefinition = (s) =>
-                {
-                    return nameof(s.Environment);
-                };
-                FieldDefinition<SettingMongo, string> fieldToDistinct = fieldDefinition(null);
+                FieldDefinition<SettingMongo, string> fieldToDistinct = nameof(SettingMongo.Environment);
                 var result = await this.SettingsCollection.DistinctAsync<string>(fieldToDistinct, filter).ConfigureAwait(false);
                 return await result.ToListAsync().ConfigureAwait(false);
             }
             catch (Exception exp)
             {
                 logger.Warn(string.Format("Error getting the available environments for the app {0} from mongo", app), exp);
+                throw;
+            }
+        }
+
+        public Setting GetSetting(string id = null)
+        {
+            return this.GetSettingAsync(id).Result;
+        }
+
+        public async Task<Setting> GetSettingAsync(string id)
+        {
+            try
+            {
+                var filter = Builders<SettingMongo>.Filter.Where(s => s.DbId == new ObjectId(id));
+                var result = await this.SettingsCollection.Find<SettingMongo>(filter)
+                                                          .SingleOrDefaultAsync()
+                                                          .ConfigureAwait(false);
+                return StoredSettingMapper.Map(result);
+            }
+            catch (Exception exp)
+            {
+                logger.Warn(string.Format("Error getting with id {0} from EF", id), exp);
                 throw;
             }
         }

@@ -8,11 +8,11 @@ namespace settings4net.Core.RemoteRepositories.Models
 {
     interface IStoredSetting
     {
-
+        
         /// <summary>
-        /// App + ":" + Env + ":" + Key
+        /// Gets or sets the setting identifier
         /// </summary>
-        string Key { get; set; }
+        string Id { get; set; }
 
         /// <summary>
         /// Gets or sets the name of the application/host that owns this setting
