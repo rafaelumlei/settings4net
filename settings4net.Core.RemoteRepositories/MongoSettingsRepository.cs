@@ -124,7 +124,7 @@ namespace settings4net.Core.RemoteRepositories
         {
             try
             {
-                var filter = Builders<SettingMongo>.Filter.Where(s => s.Id == id);
+                var filter = Builders<SettingMongo>.Filter.Where(s => s.DbId == new ObjectId(id));
                 await this.SettingsCollection.DeleteOneAsync(filter);
             }
             catch (Exception exp)

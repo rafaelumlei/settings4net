@@ -17,6 +17,17 @@ namespace settings4net.Core
             public string Description { get; set; }
         }
 
+        public class BrowseSetting
+        {
+            public int Id { get; set; }
+
+            public string Name { get; set; }
+
+            public string Env { get; set; }
+
+            public IEnumerable<EntryConfig> Entries { get; set; }
+        }
+
         /// <summary>
         ///   Initializes a new instance of a
         ///   <c>DocumentationSample</c> type.
@@ -50,13 +61,13 @@ namespace settings4net.Core
         /// </remarks>
         public static string[] ContentTypes = new string[] { "a", "b", "c" };
 
-        /// <summary>
+        /// <h4>
         ///     Initializes a new instance of a
         ///     <c>DocumentationSample</c> type.
-        /// </summary>
-        /// <example>The following is an example of initializing
-        ///          an <c>DocumentationSample</c> type:
-        ///   <code>
+        /// </h4>
+        /// <p>The following is an example of initializing
+        ///          an <b>DocumentationSample</b> type:
+        ///   <b>
         ///       // Create the type.
         ///       DocumentationSample ds = new DocumentationSample;
         ///
@@ -64,8 +75,8 @@ namespace settings4net.Core
         ///           return;
         ///
         ///       return ds.DoSomething( 5 );
-        ///   </code>
-        /// </example>
+        ///   </b>
+        /// </p>
         public static List<EntryConfig> MyCutomObject = new List<EntryConfig>()
         {
             new EntryConfig()
@@ -78,6 +89,62 @@ namespace settings4net.Core
                 Number = 2,
                 Description = "Hello 2"
             }
+        };
+
+        /// <h4>
+        ///     Initializes a new instance of a
+        ///     <c>DocumentationSample</c> type.
+        /// </h4>
+        /// <p>The following is an example of initializing
+        ///          an <b>DocumentationSample</b> type:
+        ///   <b>
+        ///       // Create the type.
+        ///       DocumentationSample ds = new DocumentationSample;
+        ///
+        ///       if ( null == ds )
+        ///           return;
+        ///
+        ///       return ds.DoSomething( 5 );
+        ///   </b>
+        /// </p>
+        public static List<BrowseSetting> BrowseOptions = new List<BrowseSetting>()
+        {
+            new BrowseSetting()
+            {
+                Id = 1,
+                Name = "Menu 1",
+                Entries = new List<EntryConfig>()
+                {
+                    new EntryConfig()
+                    {
+                        Number = 1,
+                        Description = "Hello 1"
+                    },
+                    new EntryConfig()
+                    {
+                        Number = 2,
+                        Description = "Hello 2"
+                    }
+                }
+            },
+            new BrowseSetting()
+            {
+                Id = 1,
+                Name = "Menu 1",
+                Entries = new List<EntryConfig>()
+                {
+                    new EntryConfig()
+                    {
+                        Number = 1,
+                        Description = "Hello 1"
+                    },
+                    new EntryConfig()
+                    {
+                        Number = 2,
+                        Description = "Hello 2"
+                    }
+                }
+            },
         };
 
     }
