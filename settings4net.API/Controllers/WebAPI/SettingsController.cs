@@ -76,6 +76,52 @@ namespace settings4net.API.Controllers.WebAPI
             }
         }
 
+        [HttpPut]
+        [Route("settings/{id}")]
+        public async Task<HttpResponseMessage> UpdateSetting(string id, [FromBody] Setting setting)
+        {
+            string settingInput = JsonConvert.SerializeObject(setting);
+            logger.Debug(string.Format("PUT settings/{0} BODY: {1}", id, settingInput));
+
+            if (setting == null)
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Setting to update not provided");
+
+            if (string.IsNullOrEmpty(id))
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Setting identifier not specified");
+
+            try
+            {
+                await this.SettingsRepository.UpdateSettingAsync(id, setting);
+                return Request.CreateResponse(HttpStatusCode.OK);
+            }
+            catch (Exception exp)
+            {
+                logger.Warn(string.Format("Error updating setting {0}", settingInput), exp);
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, "Unknown error occured while updating the setting");
+            }
+        }
+
+        [HttpDelete]
+        [Route("settings/{id}")]
+        public async Task<HttpResponseMessage> DeleteSetting(string id)
+        {
+            logger.Debug(string.Format("DELETE settings/{0}", id ?? "null"));
+
+            if (string.IsNullOrEmpty(id))
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Identifier not specified");
+
+            try
+            {
+                await this.SettingsRepository.DeleteSettingAsync(id);
+                return Request.CreateResponse(HttpStatusCode.OK);
+            }
+            catch (Exception exp)
+            {
+                logger.Warn(string.Format("Error deleting the setting with id {0}", id), exp);
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, "Unknown error occured while deleting the setting");
+            }
+        }
+
         [HttpGet]
         [Route("applications/{app}/settings")]
         public async Task<HttpResponseMessage> GetApplicationSettings(string app, bool fullVersion = true)
@@ -160,68 +206,6 @@ namespace settings4net.API.Controllers.WebAPI
             {
                 logger.Warn(string.Format("Error adding setting {0}", settingImput), exp);
                 return Request.CreateResponse(HttpStatusCode.InternalServerError, "Unknown error occured while adding the setting");
-            }
-        }
-
-        [HttpPut]
-        [Route("applications/{app}/environments/{env}/settings/{fullpath}")]
-        public async Task<HttpResponseMessage> UpdateSetting(string app, string env, string fullpath, [FromBody] Setting setting)
-        {
-            string settingImput = JsonConvert.SerializeObject(setting);
-            logger.Debug(string.Format("POST applications/{0}/environments/{1}/settings BODY: {2}", app ?? "null", env ?? "null", settingImput ?? "null"));
-
-            if (setting == null)
-                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Setting to update not provided");
-
-            if (string.IsNullOrEmpty(app))
-                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Application not specified");
-
-            if (string.IsNullOrEmpty(env))
-                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Environment not specified");
-
-            if (string.IsNullOrEmpty(fullpath))
-                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Fullpath not specified");
-
-            setting.Application = app;
-            setting.Environment = env;
-            setting.Fullpath = fullpath;
-
-            try
-            {
-                await this.SettingsRepository.UpdateSettingAsync(app, env, setting);
-                return Request.CreateResponse(HttpStatusCode.OK);
-            }
-            catch (Exception exp)
-            {
-                logger.Warn(string.Format("Error updating setting {0}", settingImput), exp);
-                return Request.CreateResponse(HttpStatusCode.InternalServerError, "Unknown error occured while updating the setting");
-            }
-        }
-
-        [HttpDelete]
-        [Route("applications/{app}/environments/{env}/settings/{fullpath}")]
-        public async Task<HttpResponseMessage> DeleteSetting(string app, string env, string fullpath)
-        {
-            logger.Debug(string.Format("DELETE applications/{0}/environments/{1}/setting/{2}", app ?? "null", env ?? "null", fullpath ?? "null"));
-
-            if (string.IsNullOrEmpty(app))
-                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Application not specified");
-
-            if (string.IsNullOrEmpty(env))
-                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Environment not specified");
-
-            if (string.IsNullOrEmpty(fullpath))
-                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Fullpath not specified");
-
-            try
-            {
-                await this.SettingsRepository.DeleteSettingAsync(app, env, fullpath);
-                return Request.CreateResponse(HttpStatusCode.OK);
-            }
-            catch (Exception exp)
-            {
-                logger.Warn(string.Format("Error deleting the setting {0}:{1}:{2}", app, env, fullpath), exp);
-                return Request.CreateResponse(HttpStatusCode.InternalServerError, "Unknown error occured while deleting the setting");
             }
         }
 

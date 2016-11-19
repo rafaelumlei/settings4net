@@ -47,34 +47,21 @@ namespace settings4net.Core.Interfaces
         Task<List<Setting>> GetSettingsAsync(string application = null, string currentEnvironment = null);
 
         /// <summary>
-        /// Updates settings' values (if they don't exist they are not added)
-        /// </summary>
-        /// <param name="application">The application owner of the settings</param>
-        /// <param name="currentEnvironment">The environment in use (DEV, QA, ...)</param>
-        /// <param name="values">List of setting's values to update</param>
-        void UpdateSettings(string application, string currentEnvironment, List<Setting> values);
-
-        Task UpdateSettingsAsync(string application, string currentEnvironment, List<Setting> settings);
-
-        /// <summary>
         /// Updates setting's value (if it doesn't exist it is not added)
         /// </summary>
-        /// <param name="application">The application owner of the settings</param>
-        /// <param name="currentEnvironment">The environment in use (DEV, QA, ...)</param>
+        /// <param name="id">The setting identifier</param>
         /// <param name="value">List of setting's values</param>
-        void UpdateSetting(string application, string currentEnvironment, Setting value);
+        void UpdateSetting(string id, Setting value);
 
-        Task UpdateSettingAsync(string application, string currentEnvironment, Setting value);
+        Task UpdateSettingAsync(string id, Setting value);
 
         /// <summary>
         /// Delete setting from the repository
         /// </summary>
-        /// <param name="application">The application owner of the settings</param>
-        /// <param name="currentEnvironment">The environment in use (DEV, QA, ...)</param>
-        /// <param name="fullpath">The fullpath of the setting to delete</param>
-        void DeleteSetting(string application, string currentEnvironment, string fullpath);
+        /// <param name="id">The setting identifier</param>
+        void DeleteSetting(string id);
 
-        Task DeleteSettingAsync(string application, string currentEnvironment, string fullpath);
+        Task DeleteSettingAsync(string id);
 
         /// <summary>
         /// Gets all available apps for which there are settings in the repository

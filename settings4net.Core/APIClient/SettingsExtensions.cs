@@ -71,11 +71,11 @@ namespace settings4net.Core.APIClient
         /// <param name='fullpath'>
         /// Required.
         /// </param>
-        public static string DeleteSetting(this ISettings operations, string app, string env, string fullpath)
+        public static string DeleteSetting(this ISettings operations, string id)
         {
             return Task.Factory.StartNew((object s) => 
             {
-                return ((ISettings)s).DeleteSettingAsync(app, env, fullpath);
+                return ((ISettings)s).DeleteSettingAsync(id);
             }
             , operations, CancellationToken.None, TaskCreationOptions.None, TaskScheduler.Default).Unwrap().GetAwaiter().GetResult();
         }
@@ -96,9 +96,9 @@ namespace settings4net.Core.APIClient
         /// <param name='cancellationToken'>
         /// Cancellation token.
         /// </param>
-        public static async Task<string> DeleteSettingAsync(this ISettings operations, string app, string env, string fullpath, CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public static async Task<string> DeleteSettingAsync(this ISettings operations, string id, CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            Microsoft.Rest.HttpOperationResponse<string> result = await operations.DeleteSettingWithOperationResponseAsync(app, env, fullpath, cancellationToken).ConfigureAwait(false);
+            Microsoft.Rest.HttpOperationResponse<string> result = await operations.DeleteSettingWithOperationResponseAsync(id, cancellationToken).ConfigureAwait(false);
             return result.Body;
         }
         
