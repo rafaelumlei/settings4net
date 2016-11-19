@@ -190,20 +190,12 @@ namespace settings4net.Core.APIClient
         /// <param name='cancellationToken'>
         /// Cancellation token.
         /// </param>
-        public async Task<HttpOperationResponse<string>> DeleteSettingWithOperationResponseAsync(string app, string env, string fullpath, CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async Task<HttpOperationResponse<string>> DeleteSettingWithOperationResponseAsync(string id, CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             // Validate
-            if (app == null)
+            if (id == null)
             {
-                throw new ArgumentNullException("app");
-            }
-            if (env == null)
-            {
-                throw new ArgumentNullException("env");
-            }
-            if (fullpath == null)
-            {
-                throw new ArgumentNullException("fullpath");
+                throw new ArgumentNullException(nameof(id));
             }
             
             // Tracing
@@ -213,20 +205,14 @@ namespace settings4net.Core.APIClient
             {
                 invocationId = ServiceClientTracing.NextInvocationId.ToString();
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
-                tracingParameters.Add("app", app);
-                tracingParameters.Add("env", env);
-                tracingParameters.Add("fullpath", fullpath);
+                tracingParameters.Add(nameof(id), id);
                 ServiceClientTracing.Enter(invocationId, this, "DeleteSettingAsync", tracingParameters);
             }
             
             // Construct URL
             string url = "";
-            url = url + "/api/applications/";
-            url = url + Uri.EscapeDataString(app);
-            url = url + "/environments/";
-            url = url + Uri.EscapeDataString(env);
-            url = url + "/settings/";
-            url = url + Uri.EscapeDataString(fullpath);
+            url = url + "/api/settings/";
+            url = url + Uri.EscapeDataString(id);
             string baseUrl = this.Client.BaseUri.AbsoluteUri;
             // Trim '/' character from the end of baseUrl and beginning of url.
             if (baseUrl[baseUrl.Length - 1] == '/')

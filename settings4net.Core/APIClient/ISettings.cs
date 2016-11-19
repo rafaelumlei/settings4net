@@ -39,7 +39,7 @@ namespace settings4net.Core.APIClient
         /// <param name='cancellationToken'>
         /// Cancellation token.
         /// </param>
-        Task<HttpOperationResponse<string>> DeleteSettingWithOperationResponseAsync(string app, string env, string fullpath, CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        Task<HttpOperationResponse<string>> DeleteSettingWithOperationResponseAsync(string id, CancellationToken cancellationToken = default(System.Threading.CancellationToken));
         
         /// <param name='app'>
         /// Required.

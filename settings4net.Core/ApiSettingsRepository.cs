@@ -188,11 +188,11 @@ namespace settings4net.Core.Repositories
                 Setting settingForKey = new Setting() { Application = this.CurrentApplication, Environment = this.CurrentEnviroment, Fullpath = fullpath };
                 this.CurrentSettings.TryRemove(settingForKey.Key, out settingForKey);
                 Settings settingsOperation = new Settings(this.Settings4netAPI);
-                await settingsOperation.DeleteSettingAsync(this.CurrentApplication, this.CurrentEnviroment, fullpath).ConfigureAwait(false);
+                await settingsOperation.DeleteSettingAsync(settingForKey.Id).ConfigureAwait(false);
             }
             catch (Exception exp)
             {
-                logger.Warn("Exception when adding setting to remote settings4net API", exp);
+                logger.Warn("Exception when deleting setting to remote settings4net API", exp);
             }
         }
 

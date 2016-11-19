@@ -49,18 +49,18 @@ namespace settings4net.Core.RemoteRepositories
             }
         }
 
-        public void DeleteSetting(string application, string currentEnvironment, string fullpath)
+        public void DeleteSetting(string id)
         {
-            this.DeleteSettingAsync(application, currentEnvironment, fullpath).Wait();
+            this.DeleteSettingAsync(id).Wait();
         }
 
-        public async Task DeleteSettingAsync(string application, string currentEnvironment, string fullpath)
+        public async Task DeleteSettingAsync(string id)
         {
             try
             {
                 using (var context = new SettingsContext(this.ConnectionString))
                 {
-                    SettingEF settingToDelete = await context.Settings.Where(s => s.Application == application && s.Environment == currentEnvironment && s.Fullpath == fullpath)
+                    SettingEF settingToDelete = await context.Settings.Where(s => s.Id == id)
                                                                       .FirstOrDefaultAsync()
                                                                       .ConfigureAwait(false);
 
@@ -73,7 +73,7 @@ namespace settings4net.Core.RemoteRepositories
             }
             catch (Exception exp)
             {
-                logger.Warn(string.Format("Error while deleting setting {0}:{1}:{2} from EF", application, currentEnvironment, fullpath), exp);
+                logger.Warn(string.Format("Error while deleting setting with id {0} from EF", id), exp);
                 throw;
             }
 }
@@ -112,24 +112,23 @@ namespace settings4net.Core.RemoteRepositories
             }
         }
 
-        public void UpdateSetting(string application, string currentEnvironment, Setting value)
+        public void UpdateSetting(string id, Setting value)
         {
-            this.UpdateSettingAsync(application, currentEnvironment, value).Wait();
+            this.UpdateSettingAsync(id, value).Wait();
         }
 
-        public async Task UpdateSettingAsync(string application, string currentEnvironment, Setting value)
+        public async Task UpdateSettingAsync(string id, Setting value)
         {
             try
             {
                 using (var context = new SettingsContext(this.ConnectionString))
                 {
                     SettingEF settingMapped = StoredSettingMapper.Map<SettingEF>(value);
-                    SettingEF settingEF = await context.Settings.Where(s => s.Id == settingMapped.Id).FirstOrDefaultAsync().ConfigureAwait(false);
+                    SettingEF settingEF = await context.Settings.Where(s => s.Id == id).FirstOrDefaultAsync().ConfigureAwait(false);
 
                     if (settingEF != null)
                     {
                         settingEF.JSONValue = settingMapped.JSONValue;
-                        settingEF.Documentation = settingMapped.Documentation;
                         settingEF.Updated = DateTimeOffset.UtcNow;
                         await context.SaveChangesAsync().ConfigureAwait(false);
                     }
@@ -140,26 +139,6 @@ namespace settings4net.Core.RemoteRepositories
                 logger.Warn(string.Format("Error while updating setting {0} in EF", Newtonsoft.Json.JsonConvert.SerializeObject(value)), exp);
                 throw;
             }
-        }
-
-        public void UpdateSettings(string application, string currentEnvironment, List<Setting> values)
-        {
-            this.UpdateSettingsAsync(application, currentEnvironment, values).Wait();
-        }
-
-        public async Task UpdateSettingsAsync(string application, string currentEnvironment, List<Setting> settings)
-        {
-            List<Task> tasks = new List<Task>();
-
-            if (settings != null && settings.Any())
-            {
-                foreach (var setting in settings)
-                {
-                    tasks.Add(this.UpdateSettingAsync(application, currentEnvironment, setting));
-                }
-            }
-
-            await Task.WhenAll(tasks).ConfigureAwait(false);
         }
 
         public List<string> GetApps()

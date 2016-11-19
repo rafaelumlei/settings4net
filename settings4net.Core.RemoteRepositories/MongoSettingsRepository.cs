@@ -97,14 +97,13 @@ namespace settings4net.Core.RemoteRepositories
             return this.GetSettingsAsync(application, currentEnvironment).Result;
         }
 
-        public async Task UpdateSettingAsync(string application, string currentEnvironment, Setting value)
+        public async Task UpdateSettingAsync(string id, Setting value)
         {
             try
             {
                 SettingMongo settingMongo = StoredSettingMapper.Map<SettingMongo>(value);
-                var filter = Builders<SettingMongo>.Filter.Eq(s => s.DbId, new ObjectId(value.Id));
-                var update = Builders<SettingMongo>.Update.Set(s => s.Documentation, settingMongo.Documentation)
-                                                          .Set(s => s.JSONValue, settingMongo.JSONValue)
+                var filter = Builders<SettingMongo>.Filter.Eq(s => s.DbId, new ObjectId(id));
+                var update = Builders<SettingMongo>.Update.Set(s => s.JSONValue, settingMongo.JSONValue)
                                                           .Set(s => s.Updated, DateTimeOffset.UtcNow);
 
                 await this.SettingsCollection.UpdateOneAsync(filter, update).ConfigureAwait(false);
@@ -116,48 +115,28 @@ namespace settings4net.Core.RemoteRepositories
             }
         }
 
-        public void UpdateSetting(string application, string currentEnvironment, Setting value)
+        public void UpdateSetting(string id, Setting value)
         {
-            this.UpdateSettingAsync(application, currentEnvironment, value).RunSynchronously();
+            this.UpdateSettingAsync(id, value).RunSynchronously();
         }
 
-        public async Task UpdateSettingsAsync(string application, string currentEnvironment, List<Setting> settings)
-        {
-            List<Task> tasks = new List<Task>();
-
-            if (settings != null && settings.Any())
-            {
-                foreach (var setting in settings)
-                {
-                    tasks.Add(this.UpdateSettingAsync(application, currentEnvironment, setting));
-                }
-            }
-
-            await Task.WhenAll(tasks).ConfigureAwait(false);
-        }
-
-        public void UpdateSettings(string application, string currentEnvironment, List<Setting> settings)
-        {
-            this.UpdateSettingsAsync(application, currentEnvironment, settings).RunSynchronously();
-        }
-
-        public async Task DeleteSettingAsync(string application, string currentEnvironment, string fullpath)
+        public async Task DeleteSettingAsync(string id)
         {
             try
             {
-                var filter = Builders<SettingMongo>.Filter.Where(s => s.Application == application && s.Environment == currentEnvironment && s.Fullpath == fullpath);
+                var filter = Builders<SettingMongo>.Filter.Where(s => s.Id == id);
                 await this.SettingsCollection.DeleteOneAsync(filter);
             }
             catch (Exception exp)
             {
-                logger.Warn(string.Format("Error while deleting setting {0}:{1}:{2} into mongo", application, currentEnvironment, fullpath), exp);
+                logger.Warn(string.Format("Error while deleting setting with id {0} into mongo", id), exp);
                 throw;
             }
         }
 
-        public void DeleteSetting(string application, string currentEnvironment, string fullpath)
+        public void DeleteSetting(string id)
         {
-            this.DeleteSettingAsync(application, currentEnvironment, fullpath).RunSynchronously();
+            this.DeleteSettingAsync(id).RunSynchronously();
         }
 
         public List<string> GetApps()

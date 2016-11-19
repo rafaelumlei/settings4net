@@ -24,7 +24,7 @@ namespace settings4net.Core.RemoteRepositories.Mappers
                 iMappedSetting.Documentation = setting.Documentation;
                 iMappedSetting.Environment = setting.Environment;
                 iMappedSetting.Fullpath = setting.Fullpath;
-                iMappedSetting.JSONValue = setting.JSONValue.ToString();
+                iMappedSetting.JSONValue = JsonConvert.SerializeObject(setting.JSONValue);
                 iMappedSetting.Updated = setting.Updated;
                 iMappedSetting.Created = setting.Created;
                 return mappedSetting;
