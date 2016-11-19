@@ -60,14 +60,18 @@ namespace settings4net.Core.RemoteRepositories
             {
                 using (var context = new SettingsContext(this.ConnectionString))
                 {
-                    SettingEF settingToDelete = await context.Settings.Where(s => s.Id == id)
-                                                                      .FirstOrDefaultAsync()
-                                                                      .ConfigureAwait(false);
-
-                    if (settingToDelete != null)
+                    long dbId;
+                    if (long.TryParse(id, out dbId))
                     {
-                        context.Settings.Remove(settingToDelete);
-                        await context.SaveChangesAsync().ConfigureAwait(false);
+                        SettingEF settingToDelete = await context.Settings.Where(s => s.DbId == dbId)
+                                                                          .FirstOrDefaultAsync()
+                                                                          .ConfigureAwait(false);
+
+                        if (settingToDelete != null)
+                        {
+                            context.Settings.Remove(settingToDelete);
+                            await context.SaveChangesAsync().ConfigureAwait(false);
+                        }
                     }
                 }
             }

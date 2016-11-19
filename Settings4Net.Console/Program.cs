@@ -18,7 +18,7 @@ namespace Settings4Net.Console
         static void Main(string[] args)
         {
 
-            System.Console.WriteLine("");
+            System.Console.WriteLine(XPTOSettings.BrowseOptions.First().Name);
             System.Console.ReadLine();
 
         }
