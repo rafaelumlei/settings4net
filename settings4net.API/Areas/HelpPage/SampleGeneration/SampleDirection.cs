@@ -1,4 +1,4 @@
-namespace settings4net.Areas.HelpPage
+namespace settings4net.API.Areas.HelpPage
 {
     /// <summary>
     /// Indicates whether the sample is used for request or response

@@ -1,9 +1,5 @@
 ﻿using settings4net.Core.Interfaces;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Reflection;
 using System.Xml;
 using System.IO;
@@ -25,10 +21,13 @@ namespace settings4net.Core
 
         public XMLDocumentationLoader(Assembly currentAssembly)
         {
+            // Assembly.Location does not work because sometimes has a 
+            // temp location that does not have the XML documents 
             this.CurrentAssembly = currentAssembly;
-
+            string codeBase = currentAssembly.CodeBase;
+            UriBuilder uri = new UriBuilder(codeBase);
             // extract this logic to the first access (to make it more lazy);
-            string dllPath = this.CurrentAssembly.Location;
+            string dllPath = Uri.UnescapeDataString(uri.Path);
             try
             {
                 if (!string.IsNullOrEmpty(dllPath))
@@ -55,8 +54,10 @@ namespace settings4net.Core
         {
             if (this.AssemblyDocs != null)
             {
+                XmlNamespaceManager manager = new XmlNamespaceManager(this.AssemblyDocs.NameTable);
                 string fieldDocPath = "F:" + field.DeclaringType.FullName + "." + field.Name;
-                XmlNode fieldDocNode = this.AssemblyDocs.SelectSingleNode("//member[starts-with(@name, '" + fieldDocPath + "')]");
+                XmlNode fieldDocNode = this.AssemblyDocs.SelectSingleNode("//member[starts-with(@name, '" + fieldDocPath + "')]", manager);
+                
                 return fieldDocNode?.InnerXml ?? string.Empty;
             }
 

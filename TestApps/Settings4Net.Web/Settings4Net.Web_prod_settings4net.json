@@ -5,9 +5,9 @@
     "Application": "Settings4Net.Web",
     "Environment": "prod",
     "Fullpath": "settings4net.Web.XPTOSettings.ServiceUrl",
-    "Documentation": "",
-    "Created": "2016-11-20T20:55:37.0018433+00:00",
-    "Updated": "2016-11-20T20:55:37.0018433+00:00",
+    "Documentation": "<b>\r\n            Setting with the Remote API endpoint. Configure it to match the environment's instance.\r\n            </b><p>\r\n            This API is used to get video content metadata from <i>freebase</i> ...\r\n            </p>",
+    "Created": "2016-11-20T23:28:16.894086+00:00",
+    "Updated": "2016-11-20T23:28:16.894086+00:00",
     "JSONValue": "http://www.sapo.pt/"
   },
   {
@@ -16,9 +16,9 @@
     "Application": "Settings4Net.Web",
     "Environment": "prod",
     "Fullpath": "settings4net.Web.XPTOSettings.AllowedVideoFormats",
-    "Documentation": "",
-    "Created": "2016-11-20T20:55:37.0278677+00:00",
-    "Updated": "2016-11-20T20:55:37.0278677+00:00",
+    "Documentation": "<b>\r\n            Setting to configure the allowed video types.\r\n            </b><p>\r\n            The following video formats are currently supported by the app: \r\n            <br /><ul><li>mov</li><li>wmv</li><li>ogg</li><li>avi</li><li>flv</li><li>ogg</li><li>mp4</li><li>mpeg</li></ul>\r\n            However, this setting may be used to select the ones that are currently allowed.\r\n            </p>",
+    "Created": "2016-11-20T23:28:16.9271141+00:00",
+    "Updated": "2016-11-20T23:28:16.9271141+00:00",
     "JSONValue": [
       "mp4",
       "mkv"
@@ -30,9 +30,9 @@
     "Application": "Settings4Net.Web",
     "Environment": "prod",
     "Fullpath": "settings4net.Web.XPTOSettings.NotFoundErrorMenssages",
-    "Documentation": "",
-    "Created": "2016-11-20T20:55:37.0418832+00:00",
-    "Updated": "2016-11-20T20:55:37.0418832+00:00",
+    "Documentation": "<b>\r\n            Setting to configure the app's not found error message per lang/locale.\r\n            </b><p>\r\n            Add more pairs locale, message as needed.\r\n            </p>",
+    "Created": "2016-11-20T23:28:16.9461325+00:00",
+    "Updated": "2016-11-20T23:28:16.9461325+00:00",
     "JSONValue": {
       "en-US": "Page not found.",
       "pt-PT": "Página não encontrada."
@@ -44,13 +44,13 @@
     "Application": "Settings4Net.Web",
     "Environment": "prod",
     "Fullpath": "settings4net.Web.XPTOSettings.MainMenuOptions",
-    "Documentation": "",
-    "Created": "2016-11-20T20:55:37.0769328+00:00",
-    "Updated": "2016-11-20T20:55:37.2934047+00:00",
+    "Documentation": "<b>\r\n            Setting to configure the main menu options available in the app.\r\n            </b><p> \r\n            The menus may have SubMenus and each menu may have an executable path.\r\n            The executable path may be a direct link to an external site or a internal \r\n            path, to execute within the app's context.\r\n            <br />\r\n            The Menu Types supported\r\n            <ol><li>Internal (default)</li><li>External</li></ol>\r\n            Config sample:\r\n            <br /><pre></pre></p>",
+    "Created": "2016-11-20T23:28:16.9936779+00:00",
+    "Updated": "2016-11-20T23:28:16.9936779+00:00",
     "JSONValue": [
       {
         "Id": 1,
-        "Name": "Menu 1!!!!!!!!",
+        "Name": "Menu 1",
         "Path": null,
         "Type": 1,
         "SubMenus": [
