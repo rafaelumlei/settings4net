@@ -1,18 +1,21 @@
 ﻿using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("settings4net.Core")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("This package provides a framework for .net projects that enables the projects to be configured locally using a JSON file or a remote server for centralized management/browsing. The settings are bootstraped using the code, no additional configuration is necessary.")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("settings4net.Core")]
-[assembly: AssemblyCopyright("Copyright ©  2016")]
+[assembly: AssemblyCopyright("Copyright © Rafael Pereira 2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
+[assembly: AssemblyMetadata("ProjectUrl", "https://github.com/rafaelumlei/settings4net")]
+[assembly: AssemblyMetadata("LicenseUrl", "https://github.com/rafaelumlei/settings4net/blob/master/LICENSE")]
+[assembly: AssemblyMetadata("Authors", "Rafael Pereira")]
+
 
 // Setting ComVisible to false makes the types in this assembly not visible 
 // to COM components.  If you need to access a type in this assembly from 

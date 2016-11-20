@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>settings4net.Core/settings4net.Core</id>
+    <version>$version$</version>
+    <authors>Rafael Pereira</authors>
+    <owners>Rafael Pereira</owners>
+    <licenseUrl>https://github.com/rafaelumlei/settings4net/blob/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/rafaelumlei/settings4net</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>This package provides a framework for .net projects that enables the projects to be configured locally using a JSON file or a remote server for centralized management/browsing. The settings are bootstraped using normal code, no additional configuration is necessary.</description>
+    <releaseNotes>First release.</releaseNotes>
+    <copyright>Copyright 2016</copyright>
+    <tags>settings .net json remote</tags>
+    <dependencies>
+    </dependencies>
+  </metadata>
+</package>
