@@ -7,6 +7,8 @@ using System.Linq;
 using log4net;
 using System.Threading.Tasks;
 using settings4net.Core.Repositories;
+using System.Diagnostics;
+using System.Reflection;
 
 namespace settings4net.Core
 {
@@ -14,17 +16,56 @@ namespace settings4net.Core
     {
         private static ILog logger = LogManager.GetLogger(typeof(SettingsManager));
 
-        public static void InitializeSettings4net(bool withRemote = true)
+
+        ///// <summary>
+        ///// Gets the Title of the caller assembly by inspecting a call in a specific 
+        ///// and provided position in the stack.
+        ///// </summary>
+        /// <param name="stackPosition">Position to inspect to get the caller assembly type</param>
+        /// <returns>The caller assembly's title</returns>
+        private static string GetCallerAssemblyTitle(int stackPosition)
         {
-            InitializeSettings4netAsync(withRemote).Wait();
+            StackFrame frame = new StackFrame(stackPosition);
+            MethodBase callerMethod = frame.GetMethod();
+            Type declaringType = callerMethod.DeclaringType;
+            Assembly hostAssembly = Assembly.GetAssembly(declaringType);
+            var assemblyAttr = hostAssembly.GetCustomAttribute(typeof(AssemblyTitleAttribute));
+
+            if (assemblyAttr == null || !(assemblyAttr is AssemblyTitleAttribute) || string.IsNullOrEmpty((assemblyAttr as AssemblyTitleAttribute).Title))
+                throw new ArgumentNullException("Impossible to get caller assembly title attribute. Is [assembly: AssemblyTitle(\"...\")] in AssembleInfo?");
+            else
+                return (assemblyAttr as AssemblyTitleAttribute).Title;
         }
 
-        public static async Task InitializeSettings4netAsync(bool withRemote = true)
+        /// <summary>
+        /// Initializes all the setting classes present in the domain, local config files 
+        /// are created if they do not exist. Remote repository is optional.
+        /// </summary>
+        /// <param name="withRemote">Specifies if the settings are to synchronize with a remote api</param>
+        /// <param name="appName">The application name, if not provided the Title of the assembly will be used</param>
+        public static void InitializeSettings4net(bool withRemote = true, string appName = null)
         {
+            if (string.IsNullOrEmpty(appName))
+                appName = GetCallerAssemblyTitle(2);
+
+            InitializeSettings4netAsync(withRemote, appName: appName).Wait();
+        }
+
+        /// <summary>
+        /// Initializes all the setting classes present in the domain, local config files 
+        /// are created if they do not exist. Remote repository is optional.
+        /// </summary>
+        /// <param name="withRemote">Specifies if the settings are to synchronize with a remote api</param>
+        /// <param name="appName">The application name, if not provided the Title of the assembly will be used</param>
+        public static async Task InitializeSettings4netAsync(bool withRemote = true, string appName = null)
+        {
+            if (string.IsNullOrEmpty(appName))
+                appName = GetCallerAssemblyTitle(2);
+
             if (withRemote)
-                await InitializeSettings4netAsync(new CodeSettingsRepository(), new JSONSettingsRepository(), new ApiSettingsRepository()).ConfigureAwait(false);
-            else 
-                await InitializeSettings4netAsync(new CodeSettingsRepository(), new JSONSettingsRepository()).ConfigureAwait(false);
+                await InitializeSettings4netAsync(new CodeSettingsRepository(appName), new JSONSettingsRepository(appName), new ApiSettingsRepository(appName)).ConfigureAwait(false);
+            else
+                await InitializeSettings4netAsync(new CodeSettingsRepository(appName), new JSONSettingsRepository(appName)).ConfigureAwait(false);
         }
 
         public static async Task InitializeSettings4netAsync(params ISingleAppSettingsRepository[] settingRepositoriesChain)

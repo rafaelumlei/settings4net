@@ -31,7 +31,7 @@ namespace settings4net.Core.Repositories
 
         private string CurrentEnviroment { get; set; }
 
-        public ApiSettingsRepository(string baseUri = null, string currentEnv = null)
+        public ApiSettingsRepository(string appName,string baseUri = null, string currentEnv = null)
         {
             if (string.IsNullOrEmpty(baseUri))
             {
@@ -51,7 +51,7 @@ namespace settings4net.Core.Repositories
 
             this.Settings4netAPI = new Settings4netAPI(new Uri(baseUri));
             this.CurrentEnviroment = currentEnv;
-            this.CurrentApplication = AppDomain.CurrentDomain.FriendlyName;
+            this.CurrentApplication = appName;
             var task = this.LoadRemoteSettings();
             this.CurrentSettings = task.Result;
         }
