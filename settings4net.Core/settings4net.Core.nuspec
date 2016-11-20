@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package >
   <metadata>
-    <id>settings4net.Core/settings4net.Core</id>
+    <id>settings4net.Core</id>
     <version>$version$</version>
     <authors>Rafael Pereira</authors>
     <owners>Rafael Pereira</owners>
