@@ -13,26 +13,24 @@ namespace settings4net.Core.RemoteRepositories.Mappers
     {
         public static APIClient.Models.Setting Map(Model.Setting setting)
         {
-            return new APIClient.Models.Setting()
-            {
-                Application = setting.Application,
-                Documentation = setting.Documentation,
-                Environment = setting.Environment,
-                Fullpath = setting.Fullpath,
-                JSONValue = setting.JSONValue.ToString()
-            };
+            APIClient.Models.Setting mappedSetting = new APIClient.Models.Setting();
+            mappedSetting.Application = setting.Application;
+            mappedSetting.Documentation = setting.Documentation;
+            mappedSetting.Environment = setting.Environment;
+            mappedSetting.Fullpath = setting.Fullpath;
+            mappedSetting.JSONValue = setting.JSONValue;
+            return mappedSetting;
         }
 
         public static Model.Setting Map(APIClient.Models.Setting setting)
         {
-            return new Model.Setting()
-            {
-                Application = setting.Application,
-                Documentation = setting.Documentation,
-                Environment = setting.Environment,
-                Fullpath = setting.Fullpath,
-                JSONValue = JToken.Parse(setting.JSONValue),
-            };
+            Model.Setting mappedSetting = new Model.Setting();
+            mappedSetting.Application = setting.Application;
+            mappedSetting.Documentation = setting.Documentation;
+            mappedSetting.Environment = setting.Environment;
+            mappedSetting.Fullpath = setting.Fullpath;
+            mappedSetting.JSONValue = setting.JSONValue;
+            return mappedSetting;
         }
 
         public static IEnumerable<APIClient.Models.Setting> Map(IEnumerable<Model.Setting> settings)

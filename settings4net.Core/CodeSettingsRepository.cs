@@ -26,7 +26,7 @@ namespace settings4net.Core
 
         private string CurrentApplication { get; set; }
 
-        public CodeSettingsRepository(string currentEnv = null)
+        public CodeSettingsRepository(string appName, string currentEnv = null)
         {
             if (string.IsNullOrEmpty(currentEnv))
             {
@@ -37,7 +37,7 @@ namespace settings4net.Core
             }
 
             this.CurrentEnvironment = currentEnv;
-            this.CurrentApplication = AppDomain.CurrentDomain.FriendlyName;
+            this.CurrentApplication = appName;
             this.LoadCodeSettings();
         }
 

@@ -12,13 +12,20 @@ namespace Settings4Net.Console
     {
         static Program() 
         {
-            SettingsManager.InitializeSettings4net(withRemote: true);
+            try
+            {
+                SettingsManager.InitializeSettings4net(withRemote: true);
+            }
+            catch (Exception exp)
+            {
+                System.Console.WriteLine(exp.ToString());
+            }
         }
 
         static void Main(string[] args)
         {
 
-            System.Console.WriteLine(XPTOSettings.BrowseOptions.First().Name);
+            System.Console.WriteLine(XPTOSettings.MainMenuOptions.First().Name);
             System.Console.ReadLine();
 
         }

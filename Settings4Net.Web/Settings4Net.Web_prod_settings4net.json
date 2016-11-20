@@ -1,0 +1,97 @@
+[
+  {
+    "Id": null,
+    "Key": "Settings4Net.Web:prod:settings4net.Web.XPTOSettings.ServiceUrl",
+    "Application": "Settings4Net.Web",
+    "Environment": "prod",
+    "Fullpath": "settings4net.Web.XPTOSettings.ServiceUrl",
+    "Documentation": "",
+    "Created": "2016-11-20T20:55:37.0018433+00:00",
+    "Updated": "2016-11-20T20:55:37.0018433+00:00",
+    "JSONValue": "http://www.sapo.pt/"
+  },
+  {
+    "Id": null,
+    "Key": "Settings4Net.Web:prod:settings4net.Web.XPTOSettings.AllowedVideoFormats",
+    "Application": "Settings4Net.Web",
+    "Environment": "prod",
+    "Fullpath": "settings4net.Web.XPTOSettings.AllowedVideoFormats",
+    "Documentation": "",
+    "Created": "2016-11-20T20:55:37.0278677+00:00",
+    "Updated": "2016-11-20T20:55:37.0278677+00:00",
+    "JSONValue": [
+      "mp4",
+      "mkv"
+    ]
+  },
+  {
+    "Id": null,
+    "Key": "Settings4Net.Web:prod:settings4net.Web.XPTOSettings.NotFoundErrorMenssages",
+    "Application": "Settings4Net.Web",
+    "Environment": "prod",
+    "Fullpath": "settings4net.Web.XPTOSettings.NotFoundErrorMenssages",
+    "Documentation": "",
+    "Created": "2016-11-20T20:55:37.0418832+00:00",
+    "Updated": "2016-11-20T20:55:37.0418832+00:00",
+    "JSONValue": {
+      "en-US": "Page not found.",
+      "pt-PT": "Página não encontrada."
+    }
+  },
+  {
+    "Id": null,
+    "Key": "Settings4Net.Web:prod:settings4net.Web.XPTOSettings.MainMenuOptions",
+    "Application": "Settings4Net.Web",
+    "Environment": "prod",
+    "Fullpath": "settings4net.Web.XPTOSettings.MainMenuOptions",
+    "Documentation": "",
+    "Created": "2016-11-20T20:55:37.0769328+00:00",
+    "Updated": "2016-11-20T20:55:37.2934047+00:00",
+    "JSONValue": [
+      {
+        "Id": 1,
+        "Name": "Menu 1!!!!!!!!",
+        "Path": null,
+        "Type": 1,
+        "SubMenus": [
+          {
+            "Id": 11,
+            "Name": "Submenu 1",
+            "Path": "app/select/11",
+            "Type": 1,
+            "SubMenus": null
+          },
+          {
+            "Id": 12,
+            "Name": "Submenu 2",
+            "Path": "app/select/12",
+            "Type": 1,
+            "SubMenus": null
+          }
+        ]
+      },
+      {
+        "Id": 2,
+        "Name": "Menu 2",
+        "Path": null,
+        "Type": 1,
+        "SubMenus": [
+          {
+            "Id": 21,
+            "Name": "Submenu 1",
+            "Path": "app/select/21",
+            "Type": 1,
+            "SubMenus": null
+          },
+          {
+            "Id": 22,
+            "Name": "Submenu 2",
+            "Path": "http://www.google.com",
+            "Type": 2,
+            "SubMenus": null
+          }
+        ]
+      }
+    ]
+  }
+]

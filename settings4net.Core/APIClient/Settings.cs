@@ -166,7 +166,7 @@ namespace settings4net.Core.APIClient
                 }
                 if (responseDoc != null)
                 {
-                    resultModel = responseDoc.ToString(Newtonsoft.Json.Formatting.Indented);
+                    resultModel = responseDoc.ToString();
                 }
                 result.Body = resultModel;
             }

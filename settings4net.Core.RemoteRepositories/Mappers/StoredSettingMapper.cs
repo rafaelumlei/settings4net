@@ -37,17 +37,16 @@ namespace settings4net.Core.RemoteRepositories.Mappers
         {
             if (setting != null)
             {
-                return new Model.Setting()
-                {
-                    Id = setting.Id,
-                    Application = setting.Application,
-                    Documentation = setting.Documentation,
-                    Environment = setting.Environment,
-                    Fullpath = setting.Fullpath,
-                    JSONValue = JToken.Parse(setting.JSONValue),
-                    Updated = setting.Updated,
-                    Created = setting.Created
-                };
+                Model.Setting mappedSetting = new Model.Setting();
+                mappedSetting.Id = setting.Id;
+                mappedSetting.Application = setting.Application;
+                mappedSetting.Documentation = setting.Documentation;
+                mappedSetting.Environment = setting.Environment;
+                mappedSetting.Fullpath = setting.Fullpath;
+                mappedSetting.JSONValue = JToken.Parse(setting.JSONValue);
+                mappedSetting.Updated = setting.Updated;
+                mappedSetting.Created = setting.Created;
+                return mappedSetting;
             }
             else
             {

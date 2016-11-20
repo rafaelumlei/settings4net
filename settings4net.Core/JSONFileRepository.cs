@@ -32,7 +32,7 @@ namespace settings4net.Core
 
         private string CurrentEnvironment { get; set; }
 
-        public JSONSettingsRepository(string currentEnv = null)
+        public JSONSettingsRepository(string appName, string currentEnv = null)
         {
             if (string.IsNullOrEmpty(currentEnv))
             {
@@ -43,7 +43,7 @@ namespace settings4net.Core
             }
 
             this.SettingsFileDirectory = AppDomain.CurrentDomain.BaseDirectory;
-            this.CurrentApplication = AppDomain.CurrentDomain.FriendlyName;
+            this.CurrentApplication = appName;
             this.CurrentEnvironment = currentEnv;
             var task = this.LoadSettingsFromFile();
             this.CurrentSettings = task.Result;

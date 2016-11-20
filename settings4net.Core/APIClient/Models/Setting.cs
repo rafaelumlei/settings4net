@@ -4,13 +4,14 @@
 using System;
 using System.Linq;
 using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
 
 namespace settings4net.Core.APIClient.Models
 {
     public partial class Setting
     {
         private string _application;
-        
+
         /// <summary>
         /// Optional.
         /// </summary>
@@ -19,9 +20,9 @@ namespace settings4net.Core.APIClient.Models
             get { return this._application; }
             set { this._application = value; }
         }
-        
+
         private DateTimeOffset? _created;
-        
+
         /// <summary>
         /// Optional.
         /// </summary>
@@ -30,9 +31,9 @@ namespace settings4net.Core.APIClient.Models
             get { return this._created; }
             set { this._created = value; }
         }
-        
+
         private string _documentation;
-        
+
         /// <summary>
         /// Optional.
         /// </summary>
@@ -41,9 +42,9 @@ namespace settings4net.Core.APIClient.Models
             get { return this._documentation; }
             set { this._documentation = value; }
         }
-        
+
         private string _environment;
-        
+
         /// <summary>
         /// Optional.
         /// </summary>
@@ -52,9 +53,9 @@ namespace settings4net.Core.APIClient.Models
             get { return this._environment; }
             set { this._environment = value; }
         }
-        
+
         private string _fullpath;
-        
+
         /// <summary>
         /// Optional.
         /// </summary>
@@ -63,20 +64,20 @@ namespace settings4net.Core.APIClient.Models
             get { return this._fullpath; }
             set { this._fullpath = value; }
         }
-        
-        private string _jSONValue;
-        
+
+        private JToken _jSONValue;
+
         /// <summary>
         /// Optional.
         /// </summary>
-        public string JSONValue
+        public JToken JSONValue
         {
             get { return this._jSONValue; }
             set { this._jSONValue = value; }
         }
-        
+
         private string _key;
-        
+
         /// <summary>
         /// Optional.
         /// </summary>
@@ -85,9 +86,9 @@ namespace settings4net.Core.APIClient.Models
             get { return this._key; }
             set { this._key = value; }
         }
-        
+
         private DateTimeOffset? _updated;
-        
+
         /// <summary>
         /// Optional.
         /// </summary>
@@ -96,14 +97,14 @@ namespace settings4net.Core.APIClient.Models
             get { return this._updated; }
             set { this._updated = value; }
         }
-        
+
         /// <summary>
         /// Initializes a new instance of the Setting class.
         /// </summary>
         public Setting()
         {
         }
-        
+
         /// <summary>
         /// Serialize the object
         /// </summary>
@@ -138,7 +139,17 @@ namespace settings4net.Core.APIClient.Models
             }
             if (this.JSONValue != null)
             {
-                outputObject["JSONValue"] = JToken.Parse(this.JSONValue);
+                // only after a forced parse the type of the JToken is inferred
+                try
+                {
+                    outputObject["JSONValue"] = JToken.Parse(JsonConvert.SerializeObject(this.JSONValue));
+                    // JToken t2 = JToken.Parse(JsonConvert.SerializeObject(this.JSONValue.ToString()));
+                    // JToken t3 = JToken.Parse(this.JSONValue.ToString());
+                }
+                catch
+                {
+                    outputObject["JSONValue"] = this.JSONValue;
+                }
             }
             if (this.Key != null)
             {
@@ -150,7 +161,7 @@ namespace settings4net.Core.APIClient.Models
             }
             return outputObject;
         }
-        
+
         /// <summary>
         /// Deserialize the object
         /// </summary>
@@ -186,7 +197,7 @@ namespace settings4net.Core.APIClient.Models
                 JToken jSONValueValue = inputObject["JSONValue"];
                 if (jSONValueValue != null && jSONValueValue.Type != JTokenType.Null)
                 {
-                    this.JSONValue = jSONValueValue.ToString(Newtonsoft.Json.Formatting.Indented);
+                    this.JSONValue = jSONValueValue;
                 }
                 JToken keyValue = inputObject["Key"];
                 if (keyValue != null && keyValue.Type != JTokenType.Null)
