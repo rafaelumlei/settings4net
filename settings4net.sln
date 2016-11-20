@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "settings4net.API", "setting
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "settings4net.Core.RemoteRepositories", "settings4net.Core.RemoteRepositories\settings4net.Core.RemoteRepositories.csproj", "{FE64321B-6DE3-4D54-9D81-74E63BE535DB}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TestApps", "TestApps", "{38E0D00E-447D-4945-85E9-2DD1A24EC15A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -48,5 +50,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{00B41B97-19F7-4ACD-A8A8-8AEA8658D748} = {38E0D00E-447D-4945-85E9-2DD1A24EC15A}
 	EndGlobalSection
 EndGlobal
