@@ -1,6 +1,6 @@
 using System;
 
-namespace settings4net.Areas.HelpPage.ModelDescriptions
+namespace settings4net.API.Areas.HelpPage.ModelDescriptions
 {
     /// <summary>
     /// Describes a type model.

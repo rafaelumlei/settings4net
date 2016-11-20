@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
-namespace Settings4Net.Web.Areas.HelpPage.ModelDescriptions
+namespace settings4net.Web.Areas.HelpPage.ModelDescriptions
 {
     public class EnumTypeModelDescription : ModelDescription
     {

@@ -1,7 +1,7 @@
 using System.Web.Http;
 using System.Web.Mvc;
 
-namespace settings4net.Areas.HelpPage
+namespace settings4net.API.Areas.HelpPage
 {
     public class HelpPageAreaRegistration : AreaRegistration
     {

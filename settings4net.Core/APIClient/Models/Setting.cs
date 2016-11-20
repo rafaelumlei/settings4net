@@ -143,8 +143,6 @@ namespace settings4net.Core.APIClient.Models
                 try
                 {
                     outputObject["JSONValue"] = JToken.Parse(JsonConvert.SerializeObject(this.JSONValue));
-                    // JToken t2 = JToken.Parse(JsonConvert.SerializeObject(this.JSONValue.ToString()));
-                    // JToken t3 = JToken.Parse(this.JSONValue.ToString());
                 }
                 catch
                 {

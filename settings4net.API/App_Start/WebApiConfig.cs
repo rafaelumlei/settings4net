@@ -29,7 +29,7 @@ namespace settings4net
             IUnityContainer container = new UnityContainer().LoadConfiguration();
             config.DependencyResolver = new UnityResolver(container);
 
-            //log4net.Config.XmlConfigurator.Configure();
+            GlobalConfiguration.Configuration.Formatters.XmlFormatter.SupportedMediaTypes.Clear();
 
             // Web API routes
             config.MapHttpAttributeRoutes();

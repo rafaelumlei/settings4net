@@ -17,6 +17,8 @@ namespace Settings4Net.Web
             config.SuppressDefaultHostAuthentication();
             config.Filters.Add(new HostAuthenticationFilter(OAuthDefaults.AuthenticationType));
 
+            GlobalConfiguration.Configuration.Formatters.XmlFormatter.SupportedMediaTypes.Clear();
+
             // Web API routes
             config.MapHttpAttributeRoutes();
 
