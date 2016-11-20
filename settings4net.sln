@@ -17,7 +17,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TestApps", "TestApps", "{38
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Settings4Net.Console", "TestApps\Settings4Net.Console\Settings4Net.Console.csproj", "{00B41B97-19F7-4ACD-A8A8-8AEA8658D748}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "settings4net.Web", "Settings4Net.Web\settings4net.Web.csproj", "{724062F7-77E6-4D7F-BB8E-B3C30916D8F0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "settings4net.Web", "TestApps\Settings4Net.Web\settings4net.Web.csproj", "{724062F7-77E6-4D7F-BB8E-B3C30916D8F0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

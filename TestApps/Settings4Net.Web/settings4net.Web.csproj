@@ -337,7 +337,7 @@
     <Content Include="Scripts\jquery-1.10.2.min.map" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\settings4net.Core\settings4net.Core.csproj">
+    <ProjectReference Include="..\..\settings4net.Core\settings4net.Core.csproj">
       <Project>{3a18359f-d56c-4218-b187-57919fc30850}</Project>
       <Name>settings4net.Core</Name>
     </ProjectReference>
