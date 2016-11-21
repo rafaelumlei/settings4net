@@ -4,7 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
-namespace Settings4Net.Web.Controllers
+namespace settings4net.TestWebApp.Controllers
 {
     public class HomeController : Controller
     {

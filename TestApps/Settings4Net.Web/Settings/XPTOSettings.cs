@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace settings4net.Web
+namespace settings4net.TestWebApp.Settings
 {
     class XPTOSettings : ISettingsClass
     {

@@ -1,7 +1,7 @@
 ﻿using System.Web;
 using System.Web.Optimization;
 
-namespace Settings4Net.Web
+namespace settings4net.TestWebApp
 {
     public class BundleConfig
     {

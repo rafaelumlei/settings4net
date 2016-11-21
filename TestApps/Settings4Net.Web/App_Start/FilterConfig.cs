@@ -1,7 +1,7 @@
 ﻿using System.Web;
 using System.Web.Mvc;
 
-namespace Settings4Net.Web
+namespace settings4net.TestWebApp
 {
     public class FilterConfig
     {

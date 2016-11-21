@@ -1,11 +1,12 @@
 ﻿using settings4net.Core.Interfaces;
+using settings4net.Core.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace settings4net.Core
+namespace settings4net.TestConsoleApp
 {
     class XPTOSettings : ISettingsClass
     {

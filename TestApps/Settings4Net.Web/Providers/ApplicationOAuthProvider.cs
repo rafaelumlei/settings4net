@@ -9,9 +9,9 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.OAuth;
-using Settings4Net.Web.Models;
+using settings4net.TestWebApp.Models;
 
-namespace Settings4Net.Web.Providers
+namespace settings4net.TestWebApp.Providers
 {
     public class ApplicationOAuthProvider : OAuthAuthorizationServerProvider
     {

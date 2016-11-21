@@ -4,9 +4,9 @@ using System.Linq;
 using Microsoft.Owin;
 using Owin;
 
-[assembly: OwinStartup(typeof(Settings4Net.Web.Startup))]
+[assembly: OwinStartup(typeof(settings4net.TestWebApp.Startup))]
 
-namespace Settings4Net.Web
+namespace settings4net.TestWebApp
 {
     public partial class Startup
     {

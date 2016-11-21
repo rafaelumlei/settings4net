@@ -5,7 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
 
-namespace Settings4Net.Web
+namespace settings4net.TestWebApp
 {
     public class RouteConfig
     {

@@ -8,10 +8,10 @@ using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.Google;
 using Microsoft.Owin.Security.OAuth;
 using Owin;
-using Settings4Net.Web.Providers;
-using Settings4Net.Web.Models;
+using settings4net.TestWebApp.Providers;
+using settings4net.TestWebApp.Models;
 
-namespace Settings4Net.Web
+namespace settings4net.TestWebApp
 {
     public partial class Startup
     {
