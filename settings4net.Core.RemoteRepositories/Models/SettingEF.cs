@@ -41,6 +41,7 @@ namespace settings4net.Core.RemoteRepositories.Models
         /// Gets or sets the name of the application/host that owns this setting
         /// </summary>
         [Index]
+        [Index("Ix_Unique_App_Env_Fullpath", 1, IsUnique = true)]
         [StringLength(150)]
         public string Application { get; set; }
 
@@ -48,14 +49,15 @@ namespace settings4net.Core.RemoteRepositories.Models
         /// Gets or sets the environment to which the setting value applies
         /// </summary>
         [Index]
+        [Index("Ix_Unique_App_Env_Fullpath", 1, IsUnique = true)]
         [StringLength(50)]
         public string Environment { get; set; }
 
         /// <summary>
         /// Gets or sets full path to the setting (tipically Namespace + Class + Field)
         /// </summary>
-        [Index]
         [StringLength(450)]
+        [Index("Ix_Unique_App_Env_Fullpath", 1, IsUnique = true)]
         public string Fullpath { get; set; }
 
         /// <summary>

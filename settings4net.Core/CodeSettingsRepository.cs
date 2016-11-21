@@ -144,12 +144,12 @@ namespace settings4net.Core
             throw new NotImplementedException();
         }
 
-        public void DeleteSetting(string fullpath)
+        public void DeleteSetting(Setting setting)
         {
             throw new NotImplementedException();
         }
 
-        public Task DeleteSettingAsync(string fullpath)
+        public Task DeleteSettingAsync(Setting setting)
         {
             throw new NotImplementedException();
         }

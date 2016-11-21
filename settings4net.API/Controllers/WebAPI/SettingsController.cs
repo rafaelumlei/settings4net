@@ -51,6 +51,34 @@ namespace settings4net.API.Controllers.WebAPI
             }
         }
 
+        [HttpPost]
+        [Route("settings")]
+        public async Task<HttpResponseMessage> AddSetting([FromBody] Setting setting)
+        {
+            string settingImput = JsonConvert.SerializeObject(setting);
+            logger.Debug(string.Format("POST /settings BODY: {0}", settingImput ?? "null"));
+
+            if (setting == null)
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Setting to add not provided");
+
+            if (string.IsNullOrEmpty(setting.Application))
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Application not specified");
+
+            if (string.IsNullOrEmpty(setting.Environment))
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Environment not specified");
+
+            try
+            {
+                await this.SettingsRepository.AddSettingAsync(setting);
+                return Request.CreateResponse(HttpStatusCode.Created);
+            }
+            catch (Exception exp)
+            {
+                logger.Warn(string.Format("Error adding setting {0}", settingImput), exp);
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, "Unknown error occured while adding the setting");
+            }
+        }
+
         [HttpGet]
         [Route("settings/{id}")]
         public async Task<HttpResponseMessage> GetSetting(string id)
@@ -175,37 +203,6 @@ namespace settings4net.API.Controllers.WebAPI
             {
                 logger.Warn(string.Format("Error while getting the settings for the app {0} and env {1}", app, env), exp);
                 return Request.CreateResponse(HttpStatusCode.InternalServerError, "Unknown error occured while getting the settings");
-            }
-        }
-
-        [HttpPost]
-        [Route("applications/{app}/environments/{env}/settings")]
-        public async Task<HttpResponseMessage> AddSetting(string app, string env, [FromBody] Setting setting)
-        {
-            string settingImput = JsonConvert.SerializeObject(setting);
-            logger.Debug(string.Format("POST applications/{0}/environments/{1}/settings BODY: {2}", app ?? "null", env ?? "null", settingImput ?? "null"));
-
-            if (setting == null)
-                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Setting to add not provided");
-
-            if (string.IsNullOrEmpty(app))
-                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Application not specified");
-
-            if (string.IsNullOrEmpty(env))
-                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Environment not specified");
-
-            setting.Application = app;
-            setting.Environment = env;
-
-            try
-            {
-                await this.SettingsRepository.AddSettingAsync(app, env, setting);
-                return Request.CreateResponse(HttpStatusCode.Created);
-            }
-            catch (Exception exp)
-            {
-                logger.Warn(string.Format("Error adding setting {0}", settingImput), exp);
-                return Request.CreateResponse(HttpStatusCode.InternalServerError, "Unknown error occured while adding the setting");
             }
         }
 

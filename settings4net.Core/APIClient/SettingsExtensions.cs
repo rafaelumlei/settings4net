@@ -31,7 +31,7 @@ namespace settings4net.Core.APIClient
         {
             return Task.Factory.StartNew((object s) => 
             {
-                return ((ISettings)s).AddSettingAsync(app, env, setting);
+                return ((ISettings)s).AddSettingAsync(setting);
             }
             , operations, CancellationToken.None, TaskCreationOptions.None, TaskScheduler.Default).Unwrap().GetAwaiter().GetResult();
         }
@@ -52,9 +52,9 @@ namespace settings4net.Core.APIClient
         /// <param name='cancellationToken'>
         /// Cancellation token.
         /// </param>
-        public static async Task<string> AddSettingAsync(this ISettings operations, string app, string env, Setting setting, CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public static async Task<string> AddSettingAsync(this ISettings operations, Setting setting, CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            Microsoft.Rest.HttpOperationResponse<string> result = await operations.AddSettingWithOperationResponseAsync(app, env, setting, cancellationToken).ConfigureAwait(false);
+            Microsoft.Rest.HttpOperationResponse<string> result = await operations.AddSettingWithOperationResponseAsync(setting, cancellationToken).ConfigureAwait(false);
             return result.Body;
         }
         

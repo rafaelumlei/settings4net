@@ -25,7 +25,7 @@ namespace settings4net.Core.Repositories
 
         private Settings4netAPI Settings4netAPI { get; set; }
 
-        private ConcurrentDictionary<string, Setting> CurrentSettings { get; set; }
+        private List<Setting> CurrentSettings { get; set; }
 
         private string CurrentApplication { get; set; }
 
@@ -60,10 +60,12 @@ namespace settings4net.Core.Repositories
         {
             try
             {
-                this.CurrentSettings.TryAdd(setting.Key, setting);
+                setting.Application = this.CurrentApplication;
+                setting.Environment = this.CurrentEnviroment;
+                this.CurrentSettings.Add(setting);
                 Settings settingsOperation = new Settings(this.Settings4netAPI);
                 APIClient.Models.Setting remoteSetting = ModelToAPIMapper.Map(setting);
-                await settingsOperation.AddSettingAsync(this.CurrentApplication, this.CurrentEnviroment, remoteSetting).ConfigureAwait(false);
+                await settingsOperation.AddSettingAsync(remoteSetting).ConfigureAwait(false);
             }
             catch (Exception exp)
             {
@@ -76,7 +78,7 @@ namespace settings4net.Core.Repositories
             this.AddSettingAsync(setting).Wait();
         }
 
-        private async Task<ConcurrentDictionary<string, Setting>> LoadRemoteSettings()
+        private async Task<List<Setting>> LoadRemoteSettings()
         {
             if (this.CurrentSettings == null)
             {
@@ -86,18 +88,17 @@ namespace settings4net.Core.Repositories
                 {
                     Settings settingsOp = new Settings(this.Settings4netAPI);
                     IList<APIClient.Models.Setting> remoteSettings = await settingsOp.GetSettingsAsync(this.CurrentApplication, this.CurrentEnviroment).ConfigureAwait(false);
-                    List<Setting> mappedCurrentSettings = ModelToAPIMapper.Map(remoteSettings).ToList();
-                    this.CurrentSettings = new ConcurrentDictionary<string, Setting>(mappedCurrentSettings.ToDictionary(s => s.Key));
+                    this.CurrentSettings = ModelToAPIMapper.Map(remoteSettings).ToList();
                     return this.CurrentSettings;
                 }
             }
 
-            return this.CurrentSettings ?? new ConcurrentDictionary<string, Setting>();
+            return this.CurrentSettings ?? new List<Setting>();
         }
 
         public async Task<List<Setting>> GetSettingsAsync()
         {
-            return this.CurrentSettings.Values.ToList();
+            return this.CurrentSettings;
         }
 
         public List<Setting> GetSettings()
@@ -112,9 +113,10 @@ namespace settings4net.Core.Repositories
             {
                 try
                 {
-                    var settingValuesDict = settingValues.ToDictionary(s => s.Key);
-                    var settingsToAdd = settingValues.Where(s => !this.CurrentSettings.ContainsKey(s.Key));
-                    var settingsToDelete = this.CurrentSettings.Where(s => !settingValuesDict.ContainsKey(s.Key)).Select(s => s.Value);
+                    var currentSettignsByKey = this.CurrentSettings.ToDictionary(s => s.Key);
+                    var newSettignsByKey = settingValues.ToDictionary(s => s.Key);
+                    var settingsToAdd = settingValues.Where(s => !currentSettignsByKey.ContainsKey(s.Key));
+                    var settingsToDelete = this.CurrentSettings.Where(s => !newSettignsByKey.ContainsKey(s.Key));
 
                     // adding to SERVER/API all that are present in code and not yet in the server
                     foreach (Setting setting in settingsToAdd)
@@ -125,7 +127,7 @@ namespace settings4net.Core.Repositories
                     // deleting from SERVER/API all that are no more present in code
                     foreach (Setting setting in settingsToDelete)
                     {
-                        await this.DeleteSettingAsync(setting.Key).ConfigureAwait(false);
+                        await this.DeleteSettingAsync(setting).ConfigureAwait(false);
                     }
                 }
                 catch (Exception exp)
@@ -176,19 +178,17 @@ namespace settings4net.Core.Repositories
             throw new NotImplementedException();
         }
 
-        public void DeleteSetting(string fullpath)
+        public void DeleteSetting(Setting setting)
         {
-            this.DeleteSettingAsync(fullpath).Wait();
+            this.DeleteSettingAsync(setting).Wait();
         }
 
-        public async Task DeleteSettingAsync(string fullpath)
+        public async Task DeleteSettingAsync(Setting setting)
         {
             try
             {
-                Setting settingForKey = new Setting() { Application = this.CurrentApplication, Environment = this.CurrentEnviroment, Fullpath = fullpath };
-                this.CurrentSettings.TryRemove(settingForKey.Key, out settingForKey);
                 Settings settingsOperation = new Settings(this.Settings4netAPI);
-                await settingsOperation.DeleteSettingAsync(settingForKey.Id).ConfigureAwait(false);
+                await settingsOperation.DeleteSettingAsync(setting.Id).ConfigureAwait(false);
             }
             catch (Exception exp)
             {

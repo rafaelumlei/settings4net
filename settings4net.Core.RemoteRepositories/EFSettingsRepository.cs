@@ -25,12 +25,12 @@ namespace settings4net.Core.RemoteRepositories
             this.ConnectionString = connectionString;
         }
 
-        public void AddSetting(string application, string currentEnvironment, Setting setting)
+        public void AddSetting(Setting setting)
         {
-            this.AddSettingAsync(application, currentEnvironment, setting).Wait();
+            this.AddSettingAsync(setting).Wait();
         }
 
-        public async Task AddSettingAsync(string application, string currentEnvironment, Setting setting)
+        public async Task AddSettingAsync(Setting setting)
         {
             try
             {

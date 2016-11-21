@@ -25,7 +25,7 @@ namespace settings4net.Core.APIClient
         /// <param name='cancellationToken'>
         /// Cancellation token.
         /// </param>
-        Task<HttpOperationResponse<string>> AddSettingWithOperationResponseAsync(string app, string env, Setting setting, CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        Task<HttpOperationResponse<string>> AddSettingWithOperationResponseAsync(Setting setting, CancellationToken cancellationToken = default(System.Threading.CancellationToken));
         
         /// <param name='app'>
         /// Required.

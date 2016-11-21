@@ -87,6 +87,18 @@ namespace settings4net.Core.APIClient.Models
             set { this._key = value; }
         }
 
+        private string _id;
+
+        /// <summary>
+        /// Optional.
+        /// </summary>
+        public string Id
+        {
+            get { return this._id; }
+            set { this._id = value; }
+        }
+
+
         private DateTimeOffset? _updated;
 
         /// <summary>
@@ -206,6 +218,11 @@ namespace settings4net.Core.APIClient.Models
                 if (updatedValue != null && updatedValue.Type != JTokenType.Null)
                 {
                     this.Updated = ((DateTimeOffset)updatedValue);
+                }
+                JToken identifier = inputObject["Id"];
+                if (identifier != null && identifier.Type != JTokenType.Null)
+                {
+                    this.Id = ((string)identifier);
                 }
             }
         }
