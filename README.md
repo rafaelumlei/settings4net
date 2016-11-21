@@ -63,7 +63,7 @@ How to use it
      </appSettings>
      ```
 
-3. Start coding your settings. For that the only requirement is to mark all your setting classes with the intercace **ISettingsClass**:
+3. Start coding your settings. For that aim, the unique requirement is to mark all your setting classes with the intercace **ISettingsClass**:
 
 
 ```csharp
