@@ -7,8 +7,8 @@
     <ProjectGuid>{00B41B97-19F7-4ACD-A8A8-8AEA8658D748}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>settings4net.Console</RootNamespace>
-    <AssemblyName>settings4net.Console</AssemblyName>
+    <RootNamespace>settings4net.TestConsoleApp</RootNamespace>
+    <AssemblyName>settings4net.TestConsoleApp</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -38,7 +38,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Debug\settings4net.Console.xml</DocumentationFile>
+    <DocumentationFile>bin\Debug\settings4net.TestConsoleApp.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -48,7 +48,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Release\settings4net.Console.xml</DocumentationFile>
+    <DocumentationFile>bin\Release\settings4net.TestConsoleApp.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup>
     <ManifestCertificateThumbprint>C6E58CEE0466764BC27F7D7EF2810485095396F5</ManifestCertificateThumbprint>

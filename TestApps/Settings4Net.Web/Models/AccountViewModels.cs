@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Settings4Net.Web.Models
+namespace settings4net.TestWebApp.Models
 {
     // Models returned by AccountController actions.
 

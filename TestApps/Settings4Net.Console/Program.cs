@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Settings4Net.Console
+namespace settings4net.TestConsoleApp
 {
     class Program
     {

@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using Newtonsoft.Json;
 
-namespace Settings4Net.Web.Models
+namespace settings4net.TestWebApp.Models
 {
     // Models used as parameters to AccountController actions.
 

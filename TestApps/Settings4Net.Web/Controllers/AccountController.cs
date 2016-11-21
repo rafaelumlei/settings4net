@@ -13,11 +13,11 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.OAuth;
-using Settings4Net.Web.Models;
-using Settings4Net.Web.Providers;
-using Settings4Net.Web.Results;
+using settings4net.TestWebApp.Models;
+using settings4net.TestWebApp.Providers;
+using settings4net.TestWebApp.Results;
 
-namespace Settings4Net.Web.Controllers
+namespace settings4net.TestWebApp.Controllers
 {
     [Authorize]
     [RoutePrefix("api/Account")]

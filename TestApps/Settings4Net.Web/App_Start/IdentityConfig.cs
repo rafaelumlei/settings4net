@@ -3,9 +3,9 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
-using Settings4Net.Web.Models;
+using settings4net.TestWebApp.Models;
 
-namespace Settings4Net.Web
+namespace settings4net.TestWebApp
 {
     // Configure the application user manager used in this application. UserManager is defined in ASP.NET Identity and is used by the application.
 

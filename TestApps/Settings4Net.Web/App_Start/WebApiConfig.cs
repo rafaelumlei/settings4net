@@ -6,7 +6,7 @@ using System.Web.Http;
 using Microsoft.Owin.Security.OAuth;
 using Newtonsoft.Json.Serialization;
 
-namespace Settings4Net.Web
+namespace settings4net.TestWebApp
 {
     public static class WebApiConfig
     {
