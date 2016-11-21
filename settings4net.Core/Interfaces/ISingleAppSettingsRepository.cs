@@ -52,10 +52,10 @@ namespace settings4net.Core.Interfaces
         /// <summary>
         /// Deletes setting from the respository
         /// </summary>
-        /// <param name="fullpath">The setting fullpath</param>
-        void DeleteSetting(string fullpath);
+        /// <param name="value">The setting to delete</param>
+        void DeleteSetting(Setting value);
 
-        Task DeleteSettingAsync(string fullpath);
+        Task DeleteSettingAsync(Setting value);
 
         /// <summary>
         /// Overrides the current repository with the new repository's values/state

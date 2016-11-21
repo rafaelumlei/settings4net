@@ -35,10 +35,16 @@ namespace settings4net.Core.RemoteRepositories
                 this.MongoClient = new MongoClient(mongoUrl);
                 this.Database = this.MongoClient.GetDatabase(mongoUrl.DatabaseName);
                 this.SettingsCollection = this.Database.GetCollection<SettingMongo>("Settings");
-                // filters by application and common will be very common, specially in the API and Web Management tool
-                this.SettingsCollection.Indexes.CreateOne(Builders<SettingMongo>.IndexKeys.Ascending(s => s.Application).Ascending(s => s.Environment));
-                // filters by Fullpath will be very common, specially with wild cards in the Web Management tool
-                this.SettingsCollection.Indexes.CreateOne(Builders<SettingMongo>.IndexKeys.Text(s => s.Fullpath));
+                // filters  and browsing by application and environment will be really common
+                this.SettingsCollection.Indexes.CreateOne(Builders<SettingMongo>.IndexKeys.Ascending(s => s.Application));
+                this.SettingsCollection.Indexes.CreateOne(Builders<SettingMongo>.IndexKeys.Ascending(s => s.Environment));
+                // ensuring that there are no duplicated settings in a given app & env
+                CreateIndexOptions indexOptions = new CreateIndexOptions();
+                IndexKeysDefinition<SettingMongo> keysDef = Builders<SettingMongo>.IndexKeys.Ascending(s => s.Application)
+                                                                                            .Ascending(s => s.Environment)
+                                                                                            .Ascending(s => s.Fullpath);
+                indexOptions.Unique = true;
+                this.SettingsCollection.Indexes.CreateOne(keysDef, indexOptions);
             }
             catch (Exception exp)
             {
@@ -47,7 +53,12 @@ namespace settings4net.Core.RemoteRepositories
             }
         }
 
-        public async Task AddSettingAsync(string application, string currentEnvironment, Setting setting)
+        public void AddSetting(Setting setting)
+        {
+            this.AddSettingAsync(setting).Wait();
+        }
+
+        public async Task AddSettingAsync(Setting setting)
         {
             try
             {
@@ -60,11 +71,6 @@ namespace settings4net.Core.RemoteRepositories
                 logger.Warn(string.Format("Error adding setting {0} to mongo", Newtonsoft.Json.JsonConvert.SerializeObject(setting)), exp);
                 throw;
             }
-        }
-
-        public void AddSetting(string application, string currentEnvironment, Setting setting)
-        {
-            this.AddSettingAsync(application, currentEnvironment, setting).RunSynchronously();
         }
 
         public async Task<List<Setting>> GetSettingsAsync(string application = null, string currentEnvironment = null)
@@ -202,5 +208,6 @@ namespace settings4net.Core.RemoteRepositories
                 throw;
             }
         }
+
     }
 }

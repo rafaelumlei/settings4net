@@ -25,6 +25,7 @@ namespace settings4net.Core.RemoteRepositories.Mappers
         public static Model.Setting Map(APIClient.Models.Setting setting)
         {
             Model.Setting mappedSetting = new Model.Setting();
+            mappedSetting.Id = setting.Id;
             mappedSetting.Application = setting.Application;
             mappedSetting.Documentation = setting.Documentation;
             mappedSetting.Environment = setting.Environment;

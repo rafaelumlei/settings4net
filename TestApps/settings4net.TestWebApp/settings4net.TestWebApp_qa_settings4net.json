@@ -1,0 +1,97 @@
+[
+  {
+    "Id": null,
+    "Key": "settings4net.TestWebApp:qa:settings4net.TestWebApp.Settings.XPTOSettings.ServiceUrl",
+    "Application": "settings4net.TestWebApp",
+    "Environment": "qa",
+    "Fullpath": "settings4net.TestWebApp.Settings.XPTOSettings.ServiceUrl",
+    "Documentation": "",
+    "Created": "2016-11-21T16:23:33.1472642+00:00",
+    "Updated": "2016-11-21T16:23:33.1472642+00:00",
+    "JSONValue": "http://www.sapo.pt/"
+  },
+  {
+    "Id": null,
+    "Key": "settings4net.TestWebApp:qa:settings4net.TestWebApp.Settings.XPTOSettings.AllowedVideoFormats",
+    "Application": "settings4net.TestWebApp",
+    "Environment": "qa",
+    "Fullpath": "settings4net.TestWebApp.Settings.XPTOSettings.AllowedVideoFormats",
+    "Documentation": "",
+    "Created": "2016-11-21T16:23:33.1702992+00:00",
+    "Updated": "2016-11-21T16:23:33.1702992+00:00",
+    "JSONValue": [
+      "mp4",
+      "mkv"
+    ]
+  },
+  {
+    "Id": null,
+    "Key": "settings4net.TestWebApp:qa:settings4net.TestWebApp.Settings.XPTOSettings.NotFoundErrorMenssages",
+    "Application": "settings4net.TestWebApp",
+    "Environment": "qa",
+    "Fullpath": "settings4net.TestWebApp.Settings.XPTOSettings.NotFoundErrorMenssages",
+    "Documentation": "",
+    "Created": "2016-11-21T16:23:33.1968121+00:00",
+    "Updated": "2016-11-21T16:23:33.1968121+00:00",
+    "JSONValue": {
+      "en-US": "Page not found.",
+      "pt-PT": "Página não encontrada."
+    }
+  },
+  {
+    "Id": null,
+    "Key": "settings4net.TestWebApp:qa:settings4net.TestWebApp.Settings.XPTOSettings.MainMenuOptions",
+    "Application": "settings4net.TestWebApp",
+    "Environment": "qa",
+    "Fullpath": "settings4net.TestWebApp.Settings.XPTOSettings.MainMenuOptions",
+    "Documentation": "",
+    "Created": "2016-11-21T16:23:33.2563698+00:00",
+    "Updated": "2016-11-21T16:23:33.2563698+00:00",
+    "JSONValue": [
+      {
+        "Id": 1,
+        "Name": "Menu 1",
+        "Path": null,
+        "Type": 1,
+        "SubMenus": [
+          {
+            "Id": 11,
+            "Name": "Submenu 1",
+            "Path": "app/select/11",
+            "Type": 1,
+            "SubMenus": null
+          },
+          {
+            "Id": 12,
+            "Name": "Submenu 2",
+            "Path": "app/select/12",
+            "Type": 1,
+            "SubMenus": null
+          }
+        ]
+      },
+      {
+        "Id": 2,
+        "Name": "Menu 2",
+        "Path": null,
+        "Type": 1,
+        "SubMenus": [
+          {
+            "Id": 21,
+            "Name": "Submenu 1",
+            "Path": "app/select/21",
+            "Type": 1,
+            "SubMenus": null
+          },
+          {
+            "Id": 22,
+            "Name": "Submenu 2",
+            "Path": "http://www.google.com",
+            "Type": 2,
+            "SubMenus": null
+          }
+        ]
+      }
+    ]
+  }
+]

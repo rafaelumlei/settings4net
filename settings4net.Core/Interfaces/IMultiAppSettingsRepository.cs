@@ -21,12 +21,10 @@ namespace settings4net.Core.Interfaces
         /// <summary>
         /// Adds a new setting to the settings' repository 
         /// </summary>
-        /// <param name="application">The application owner of the settings</param>
-        /// <param name="currentEnvironment">The environment in use (DEV, QA, ...)</param>
         /// <param name="setting">The setting to add</param>
-        void AddSetting(string application, string currentEnvironment, Setting setting);
+        void AddSetting(Setting setting);
 
-        Task AddSettingAsync(string application, string currentEnvironment, Setting setting);
+        Task AddSettingAsync(Setting setting);
 
         /// <summary>
         /// Gets a setting by id

@@ -53,17 +53,8 @@ namespace settings4net.Core.APIClient
         /// <param name='cancellationToken'>
         /// Cancellation token.
         /// </param>
-        public async Task<HttpOperationResponse<string>> AddSettingWithOperationResponseAsync(string app, string env, Setting setting, CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async Task<HttpOperationResponse<string>> AddSettingWithOperationResponseAsync(Setting setting, CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            // Validate
-            if (app == null)
-            {
-                throw new ArgumentNullException("app");
-            }
-            if (env == null)
-            {
-                throw new ArgumentNullException("env");
-            }
             if (setting == null)
             {
                 throw new ArgumentNullException("setting");
@@ -76,19 +67,13 @@ namespace settings4net.Core.APIClient
             {
                 invocationId = ServiceClientTracing.NextInvocationId.ToString();
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
-                tracingParameters.Add("app", app);
-                tracingParameters.Add("env", env);
                 tracingParameters.Add("setting", setting);
                 ServiceClientTracing.Enter(invocationId, this, "AddSettingAsync", tracingParameters);
             }
             
             // Construct URL
             string url = "";
-            url = url + "/api/applications/";
-            url = url + Uri.EscapeDataString(app);
-            url = url + "/environments/";
-            url = url + Uri.EscapeDataString(env);
-            url = url + "/settings";
+            url = url + "api/settings";
             string baseUrl = this.Client.BaseUri.AbsoluteUri;
             // Trim '/' character from the end of baseUrl and beginning of url.
             if (baseUrl[baseUrl.Length - 1] == '/')
