@@ -66,7 +66,7 @@ How to use it
 3. Start coding your settings. For that aim, the unique requirement is to mark all your setting classes with the intercace **ISettingsClass**:
 
 
-```csharp
+   ```csharp
 
     class XPTOSettings : ISettingsClass
     {
@@ -212,3 +212,5 @@ How to use it
    ```
 
    Note: all your application settings must be well documented so that the operations team may be autonomous managing the setting values. The comments were writtten using plain to html to improve readability in the web portal, because in this first version the setting documentation is presented as is. It is only possible for the **settings4net** to  extract the setttings' documentation if the MSBuild outputs the XML files as part of the build, for that go to Project->Settings->Build and check the **XML Documentation File**. 
+
+
