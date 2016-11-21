@@ -11,47 +11,47 @@ How to use it
 
 1. Install the nuget package [settings4net](https://www.nuget.org/packages/settings4net/) in your project and initialize the **settings4net** ensuring that it is initialized when the settings start to be used. 
 
-**In a console app**:
+    **In a console app**:
 
-```csharp
-    class Program
-    {
-        static Program() 
+    ```csharp
+        class Program
         {
-        	// the withremote parameter is only to use if you want send 
-            // all the application settings to a remote API for centralized 
-            // management. Without remote the settings are still overridable 
-            // using a JSON file.
-            SettingsManager.InitializeSettings4net(withRemote: true);
-        }
+            static Program() 
+            {
+                // the withremote parameter is only to use if you want send 
+                // all the application settings to a remote API for centralized 
+                // management. Without remote the settings are still overridable 
+                // using a JSON file.
+                SettingsManager.InitializeSettings4net(withRemote: true);
+            }
 
-        static void Main(string[] args)
+            static void Main(string[] args)
+            {
+                // your code goes here
+            }
+        }
+    ```
+
+    **In a ASP.NET Web project**:
+
+    ```csharp
+        public class WebApiApplication : System.Web.HttpApplication
         {
-        	// your code goes here
-        }
-    }
-```
+            static WebApiApplication()
+            {
+                SettingsManager.InitializeSettings4net(withRemote: true);
+            }
 
-**In a ASP.NET Web project**:
-
-```csharp
-    public class WebApiApplication : System.Web.HttpApplication
-    {
-        static WebApiApplication()
-        {
-            SettingsManager.InitializeSettings4net(withRemote: true);
+            protected void Application_Start()
+            {
+                AreaRegistration.RegisterAllAreas();
+                GlobalConfiguration.Configure(WebApiConfig.Register);
+                FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
+                RouteConfig.RegisterRoutes(RouteTable.Routes);
+                BundleConfig.RegisterBundles(BundleTable.Bundles);
+            }
         }
-
-        protected void Application_Start()
-        {
-            AreaRegistration.RegisterAllAreas();
-            GlobalConfiguration.Configure(WebApiConfig.Register);
-            FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
-            RouteConfig.RegisterRoutes(RouteTable.Routes);
-            BundleConfig.RegisterBundles(BundleTable.Bundles);
-        }
-    }
-```
+    ```
 
 2. Add to the App/Web.config the settings that specify what is the current environment of the app (typically DEV while you are developing it) and, optinonally, the remote settings repository API endpoint (this is necessary if you are initializing the settings4net with the remote option active):
 
