@@ -3,7 +3,15 @@
 [![Build status](https://ci.appveyor.com/api/projects/status/iiysdoygrgt10ktd/branch/master?svg=true)](https://ci.appveyor.com/project/rafaelumlei/settings4net/branch/master)
 [![NuGet Pre Release](https://img.shields.io/nuget/vpre/settings4net.svg)](https://www.nuget.org/packages/settings4net/)
 
-This project provides a framework and tools that enable applications to be configured locally using a JSON file or in a remote server for centralized settings's management/browsing. The settings are implemented using normal code, no additional configuration is necessary.
+This project provides a framework and tools that enable **.NET** applications to be configured in centralized remote server. The settings are implemented using normal code and no synchronization code is necessary.
+
+Main features:
+
+* Write your settings in plain code using normal classes:
+* * you are not limited to use value types;
+* * there's no need to add Settings.settings files;
+* When the remote settings API is offline the settings4net will boot using the last version downloaded and serialized  from the server;
+* Settings' documentation is sent to the remote server and may be browsed in the web management portal;
 
 How to use it
 -------------
