@@ -3,15 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "settings4net.Tests", "settings4net.Tests\settings4net.Tests.csproj", "{AFA66ACE-8DB8-42F2-AA29-0F61C416452A}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "settings4net.Core", "settings4net.Core\settings4net.Core.csproj", "{3A18359F-D56C-4218-B187-57919FC30850}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "settings4net.Core.Tests", "settings4net.Core.Tests\settings4net.Core.Tests.csproj", "{FFBC3C45-E846-41B0-BC76-B088CFCB27CD}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "settings4net.API", "settings4net.API\settings4net.API.csproj", "{D8BC1982-9FB7-4463-B220-E98B52B3BABE}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "settings4net.Core.RemoteRepositories", "settings4net.Core.RemoteRepositories\settings4net.Core.RemoteRepositories.csproj", "{FE64321B-6DE3-4D54-9D81-74E63BE535DB}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TestApps", "TestApps", "{38E0D00E-447D-4945-85E9-2DD1A24EC15A}"
 EndProject
@@ -25,10 +19,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{AFA66ACE-8DB8-42F2-AA29-0F61C416452A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{AFA66ACE-8DB8-42F2-AA29-0F61C416452A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{AFA66ACE-8DB8-42F2-AA29-0F61C416452A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{AFA66ACE-8DB8-42F2-AA29-0F61C416452A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{3A18359F-D56C-4218-B187-57919FC30850}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{3A18359F-D56C-4218-B187-57919FC30850}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3A18359F-D56C-4218-B187-57919FC30850}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -37,14 +27,6 @@ Global
 		{FFBC3C45-E846-41B0-BC76-B088CFCB27CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FFBC3C45-E846-41B0-BC76-B088CFCB27CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FFBC3C45-E846-41B0-BC76-B088CFCB27CD}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D8BC1982-9FB7-4463-B220-E98B52B3BABE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D8BC1982-9FB7-4463-B220-E98B52B3BABE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D8BC1982-9FB7-4463-B220-E98B52B3BABE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D8BC1982-9FB7-4463-B220-E98B52B3BABE}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FE64321B-6DE3-4D54-9D81-74E63BE535DB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FE64321B-6DE3-4D54-9D81-74E63BE535DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FE64321B-6DE3-4D54-9D81-74E63BE535DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FE64321B-6DE3-4D54-9D81-74E63BE535DB}.Release|Any CPU.Build.0 = Release|Any CPU
 		{00B41B97-19F7-4ACD-A8A8-8AEA8658D748}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{00B41B97-19F7-4ACD-A8A8-8AEA8658D748}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{00B41B97-19F7-4ACD-A8A8-8AEA8658D748}.Release|Any CPU.ActiveCfg = Release|Any CPU

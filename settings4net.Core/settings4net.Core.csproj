@@ -83,7 +83,6 @@
     <Compile Include="APIClient\SettingsExtensions.cs" />
     <Compile Include="ApiSettingsRepository.cs" />
     <Compile Include="CodeSettingsRepository.cs" />
-    <Compile Include="Interfaces\IMultiAppSettingsRepository.cs" />
     <Compile Include="Interfaces\ISingleAppSettingsRepository.cs" />
     <Compile Include="JSONFileRepository.cs" />
     <Compile Include="Mappers\ModelToAPIMapper.cs" />
