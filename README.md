@@ -218,6 +218,6 @@ How it works
 
 Settings repositories chain:
 
-![Settings Chain](/readme-assets/path/to/image.png?raw=true)
+![Settings Chain](/readme-assets/settings4net_architecture.svg?raw=true)
 
 under construction...
