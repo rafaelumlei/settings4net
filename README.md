@@ -213,4 +213,11 @@ How to use it
 
    Note: all your application settings must be well documented so that the operations team may be autonomous managing the setting values. The comments were writtten using plain to html to improve readability in the web portal, because in this first version the setting documentation is presented as is. It is only possible for the **settings4net** to  extract the setttings' documentation if the MSBuild outputs the XML files as part of the build, for that go to Project->Settings->Build and check the **XML Documentation File**. 
 
+How it works
+-------------
 
+Settings repositories chain:
+
+![enter image description here](/../readme-assets/path/to/image.png?raw=true)
+
+under construction...
