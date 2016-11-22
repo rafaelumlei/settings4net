@@ -5,7 +5,6 @@
 
 This project provides a framework and tools that enable applications to be configured locally using a JSON file or in a remote server for centralized settings's management/browsing. The settings are implemented using normal code, no additional configuration is necessary.
 
-
 How to use it
 -------------
 
@@ -139,23 +138,23 @@ How to use it
         };
 
 
-        /// <b>
-        /// Setting to configure the main menu options available in the app.
-        /// </b>
-        /// <p> 
-        /// The menus may have SubMenus and each menu may have an executable path.
-        /// The executable path may be a direct link to an external site or a internal 
-        /// path, to execute within the app's context.
-        /// <br/>
-        /// The Menu Types supported
-        /// <ol>
-        ///     <li>Internal (default)</li>
-        ///     <li>External</li>
-        /// </ol>
-        /// Config sample:
+           /// <b>
+           /// Setting to configure the main menu options available in the app.
+           /// </b>
+           /// <p> 
+           /// The menus may have SubMenus and each menu may have an executable path.
+           /// The executable path may be a direct link to an external site or a internal 
+           /// path, to execute within the app's context.
+           /// <br/>
+           /// The Menu Types supported
+           /// <ol>
+           ///     <li>Internal (default)</li>
+           ///     <li>External</li>
+           /// </ol>
+           /// Config sample:
            /// <br/>
            /// <pre>
-           /// 
+           ///  ...
            /// </pre>
            /// </p>
            public static List<MenuOption> MainMenuOptions = new List<MenuOption>()
