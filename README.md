@@ -53,7 +53,7 @@ How to use it
         }
     ```
 
-2. Add to the App/Web.config the settings that specify what is the current environment of the app (typically DEV while you are developing it) and, optinonally, the remote settings repository API endpoint (this is necessary if you are initializing the settings4net with the remote option active):
+2. Add to the App/Web.config the settings that specify what is the current environment of the app (typically DEV while you are developing it) and, optionally, the remote settings repository API endpoint (this is necessary if you are initializing the settings4net with the remote option active):
 
    ```xml
      <appSettings>
@@ -63,7 +63,7 @@ How to use it
      </appSettings>
      ```
 
-3. Start coding your settings. For that aim, the unique requirement is to mark all your setting classes with the intercace **ISettingsClass**:
+3. Start coding your settings. For that aim, the unique requirement is to mark all your setting classes with the interface **ISettingsClass**:
 
 
    ```csharp
