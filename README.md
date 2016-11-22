@@ -8,8 +8,8 @@ This project provides a framework and tools that enable **.NET** applications to
 Main features:
 
 * Write your settings in plain code using normal classes:
-* * you are not limited to use value types;
-* * there's no need to add Settings.settings files;
+   * you are not limited to use value types;
+   * there's no need to add Settings.settings files;
 * When the remote settings API is offline the settings4net will boot using the last version downloaded and serialized  from the server;
 * Settings' documentation is sent to the remote server and may be browsed in the web management portal;
 
