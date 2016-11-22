@@ -218,6 +218,6 @@ How it works
 
 Settings repositories chain:
 
-![enter image description here](/../readme-assets/path/to/image.png?raw=true)
+![Settings Chain](/readme-assets/path/to/image.png?raw=true)
 
 under construction...
