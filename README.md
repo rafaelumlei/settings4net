@@ -218,6 +218,7 @@ How it works
 
 Settings repositories chain:
 
-![Settings Chain](/readme-assets/settings4net_architecture.svg?raw=true)
+![Settings Chain](https://raw.githubusercontent.com/rafaelumlei/settings4net/readme-assets/settings4net_architecture.svg)
+
 
 under construction...
