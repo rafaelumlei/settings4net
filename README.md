@@ -218,7 +218,7 @@ How it works
 
 Settings repositories chain:
 
-![Settings Chain](/readme-assets/settings4net_architecture.png)
+![Settings Chain](/../readme-assets/settings4net_architecture.png)
 
 
 under construction...
