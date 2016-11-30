@@ -16,7 +16,7 @@ Main features:
   * setting values from the server are updated in the code on boot;
 * When the remote settings API is offline the settings4net will boot using the last version that came from the server;
 * Settings' documentation is sent to the remote server and may be browsed in the web management portal;
-* Manage all the settings in a centralized web portal (check the project [settings4all](https://github.com/rafaelumlei/settings4all/)); 
+* Manage all the settings in a centralized web portal (check the project [settings4all.API](https://github.com/rafaelumlei/settings4all/tree/master/settings4all.API)); 
 
 How to use it
 -------------
