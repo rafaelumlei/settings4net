@@ -229,7 +229,7 @@ The **settings4net** implements a settings repositories chain that currently sup
 
 When the **InitializeSettings4net** is called the following operations are performed:
 * All the settings are loaded from Code, Local JSON file and Remote Repository (Settings4all) for the current environment (dev, qa, pre-prod, prod, ...);
-* The settings are processed considering the priority of the repositories chain, the settings' values that come from high priority repositories override the others;
+* The settings are processed considering the priority of the repositories chain, the settings' values that come from high priority repositories override the ones that from others;
 * The new settings state is then propagated from code to all repositories, ensuring that:
   * the new values are propagated to the local JSON configuration file what ensures that the application has always a local backup of the last valid state. This is specially important because the application will be able to boot and work properly when the remote reository is offline due to lack of connectivety or other reason;
   * the new settings that where added to the code and are not present in the other repositories are propagated;
