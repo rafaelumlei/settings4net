@@ -228,9 +228,15 @@ How to use it
 How it works
 -------------
 
-Settings repositories chain:
+The *settings4net* implements a settings repositories chain that currently supports coded settings, local configuration file in JSON and remote repository (Settings4all API):
 
 ![Settings Chain](/../readme-assets/settings4net_architecture_v1.png)
 
+When the *InitializeSettings4net* the following operations are performed:
+* All the settings are loaded from Code, Local JSON file and Remote Repository (Settings4all) for the current application environment;
+* The settings are processed considering the priority of the repositories chain, the settings' values that come from high priority repositories override the others;
+* The new settings state is then propagated from code to all repositories, ensuring that:
+  * the new values are propagated to the local JSON configuration file what ensures that the application has a backup of;
+  * the new settings 
 
-under construction...
+ 
