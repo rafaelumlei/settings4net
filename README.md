@@ -10,7 +10,7 @@ Main features:
 * Write your settings in plain code using normal classes:
    * you are not limited to use value types;
    * there's no need to add Settings.settings files;
-* Synchronze your settings with a remote repository (check the project [settings4all](https://github.com/rafaelumlei/settings4all/tree/master/Settings4all.UI)):
+* Synchronze your settings with a remote repository (check the project [Settings4all.UI](https://github.com/rafaelumlei/settings4all/tree/master/Settings4all.UI)):
   * new settings are added to the remote server;
   * settings deleted from code are deleted from the remote server;
   * setting values from the server are updated in the code on boot;
