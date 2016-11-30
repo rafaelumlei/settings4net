@@ -39,7 +39,7 @@ How to use it
 
             static void Main(string[] args)
             {
-                // your code goes here
+                ...
             }
         }
     ```
@@ -56,11 +56,7 @@ How to use it
 
             protected void Application_Start()
             {
-                AreaRegistration.RegisterAllAreas();
-                GlobalConfiguration.Configure(WebApiConfig.Register);
-                FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
-                RouteConfig.RegisterRoutes(RouteTable.Routes);
-                BundleConfig.RegisterBundles(BundleTable.Bundles);
+              ...
             }
         }
     ```
