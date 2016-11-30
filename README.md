@@ -26,22 +26,22 @@ How to use it
     **In a console app**:
 
     ```csharp
-        class Program
-        {
-            static Program() 
-            {
-                // the withremote parameter is only to use if you want send 
-                // all the application settings to a remote API for centralized 
-                // management. Without remote the settings are still overridable 
-                // using a JSON file.
-                SettingsManager.InitializeSettings4net(withRemote: true);
-            }
+    class Program
+    {
+	static Program() 
+	{
+		// the withremote parameter is only to use if you want send 
+		// all the application settings to a remote API for centralized 
+		// management. Without remote the settings are still overridable 
+		// using a JSON file.
+		SettingsManager.InitializeSettings4net(withRemote: true);
+	}
 
-            static void Main(string[] args)
-            {
-                ...
-            }
-        }
+	static void Main(string[] args)
+	{
+		...
+	}
+    }       
     ```
 
     **In a ASP.NET Web project**:
