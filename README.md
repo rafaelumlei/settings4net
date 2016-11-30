@@ -53,6 +53,7 @@ How to use it
     	{
     	    SettingsManager.InitializeSettings4net(withRemote: true);
     	}
+	
     	protected void Application_Start()
     	{
     	  ...
