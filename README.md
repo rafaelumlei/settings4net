@@ -146,77 +146,76 @@ How to use it
             }
         };
 
+        /// <b>
+        /// Setting to configure the main menu options available in the app.
+        /// </b>
+        /// <p> 
+        /// The menus may have SubMenus and each menu may have an executable path.
+        /// The executable path may be a direct link to an external site or a internal 
+        /// path, to execute within the app's context.
+        /// <br/>
+        /// The Menu Types supported
+        /// <ol>
+        ///     <li>Internal (default)</li>
+        ///     <li>External</li>
+        /// </ol>
+        /// Config sample:
+        /// <br/>
+        /// <pre>
+        ///  ...
+        /// </pre>
+        /// </p>
+        public static List<MenuOption> MainMenuOptions = new List<MenuOption>()
+        {
+            new MenuOption()
+            {
+                Id = 1,
+                Name = "Menu 1",
+                Path = null,
+                SubMenus = new List<MenuOption>()
+                {
+                    new MenuOption()
+                    {
+                        Id = 11,
+                        Name = "Submenu 1",
+                        Path = "app/select/11",
+                        SubMenus = null
+                    },
+                    new MenuOption()
+                    {
+                        Id = 12,
+                        Name = "Submenu 2",
+                        Path = "app/select/12",
+                        SubMenus = null
+                    }
+                }
+            },
+            new MenuOption()
+            {
+                Id = 2,
+                Name = "Menu 2",
+                SubMenus = new List<MenuOption>()
+                {
+                    new MenuOption()
+                    {
+                        Id = 21,
+                        Name = "Submenu 1",
+                        Path = "app/select/21",
+                        SubMenus = null
+                    },
+                    new MenuOption()
+                    {
+                        Id = 22,
+                        Name = "Submenu 2",
+                        Type = MenuType.External,
+                        Path = "http://www.google.com",
+                        SubMenus = null
+                    }
+                }
+            },
+        };
+	}
 
-           /// <b>
-           /// Setting to configure the main menu options available in the app.
-           /// </b>
-           /// <p> 
-           /// The menus may have SubMenus and each menu may have an executable path.
-           /// The executable path may be a direct link to an external site or a internal 
-           /// path, to execute within the app's context.
-           /// <br/>
-           /// The Menu Types supported
-           /// <ol>
-           ///     <li>Internal (default)</li>
-           ///     <li>External</li>
-           /// </ol>
-           /// Config sample:
-           /// <br/>
-           /// <pre>
-           ///  ...
-           /// </pre>
-           /// </p>
-           public static List<MenuOption> MainMenuOptions = new List<MenuOption>()
-           {
-               new MenuOption()
-               {
-                   Id = 1,
-                   Name = "Menu 1",
-                   Path = null,
-                   SubMenus = new List<MenuOption>()
-                   {
-                       new MenuOption()
-                       {
-                           Id = 11,
-                           Name = "Submenu 1",
-                           Path = "app/select/11",
-                           SubMenus = null
-                       },
-                       new MenuOption()
-                       {
-                           Id = 12,
-                           Name = "Submenu 2",
-                           Path = "app/select/12",
-                           SubMenus = null
-                       }
-                   }
-               },
-               new MenuOption()
-               {
-                   Id = 2,
-                   Name = "Menu 2",
-                   SubMenus = new List<MenuOption>()
-                   {
-                       new MenuOption()
-                       {
-                           Id = 21,
-                           Name = "Submenu 1",
-                           Path = "app/select/21",
-                           SubMenus = null
-                       },
-                       new MenuOption()
-                       {
-                           Id = 22,
-                           Name = "Submenu 2",
-                           Type = MenuType.External,
-                           Path = "http://www.google.com",
-                           SubMenus = null
-                       }
-                   }
-               },
-           };
-
-       }
    ```
 
    Note: all your application settings must be well documented so that the operations team may be autonomous managing the setting values. The comments were writtten using plain to html to improve readability in the web portal, because in this first version the setting documentation is presented as is. It is only possible for the **settings4net** to  extract the setttings' documentation if the MSBuild outputs the XML files as part of the build, for that go to Project->Settings->Build and check the **XML Documentation File**. 
