@@ -47,18 +47,17 @@ How to use it
     **In a ASP.NET Web project**:
 
     ```csharp
-        public class WebApiApplication : System.Web.HttpApplication
-        {
-            static WebApiApplication()
-            {
-                SettingsManager.InitializeSettings4net(withRemote: true);
-            }
-
-            protected void Application_Start()
-            {
-              ...
-            }
-        }
+    public class WebApiApplication : System.Web.HttpApplication
+    {
+    	static WebApiApplication()
+    	{
+    	    SettingsManager.InitializeSettings4net(withRemote: true);
+    	}
+    	protected void Application_Start()
+    	{
+    	  ...
+    	}
+    }
     ```
 
 2. Add to the App/Web.config the settings that specify what is the current environment of the app (typically DEV while you are developing it) and, optionally, the remote settings repository API endpoint (this is necessary if you are initializing the settings4net with the remote option active):
